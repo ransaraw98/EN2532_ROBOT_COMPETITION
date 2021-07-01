@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.9232062419328065 -0.21911987089540488 0.3157161969793207 5.868761579802145
-  position 0.0740495882138677 0.21974470973914173 0.5088046762869287
+  orientation 0.031474588820489494 -0.9962751091773728 -0.08028235853657403 3.418214037281813
+  position -0.002296045834429425 0.09964772257182716 -0.6619124815759523
 }
 TexturedBackground {
 }
@@ -29,13 +29,28 @@ Robot {
     DEF Upper_Platform Solid {
       translation 0 0.052 -0.036
       children [
+        DEF Arduino Solid {
+          translation 0.04847 0.007605 0
+          children [
+            Shape {
+              geometry Box {
+                size 0.05342 0.01021 0.1016
+              }
+            }
+          ]
+        }
         Shape {
+          appearance PBRAppearance {
+          }
           geometry Box {
             size 0.17 0.005 0.115
           }
         }
       ]
       name "solid(7)"
+      recognitionColors [
+        1 0 0
+      ]
     }
     DEF Spacer_4 Solid {
       translation 0.08 0.025 0.009
@@ -107,7 +122,7 @@ Robot {
           appearance Appearance {
             material Material {
               ambientIntensity 1
-              diffuseColor 0.792157 0.819608 0.933333
+              diffuseColor 0 0.819608 0
               shininess 0.4
               specularColor 0.396078 0.409804 0.466667
             }
@@ -136,6 +151,9 @@ Robot {
       boundingObject USE BOT_LAYER
       physics Physics {
       }
+      recognitionColors [
+        0 0 0
+      ]
     }
     DEF LEFT HingeJoint {
       jointParameters HingeJointParameters {
@@ -187,4 +205,7 @@ Robot {
   boundingObject USE BOT_LAYER
   physics Physics {
   }
+  recognitionColors [
+    0 0 0
+  ]
 }
