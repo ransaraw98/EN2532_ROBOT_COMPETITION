@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.11023165223422625 -0.9932443670589013 -0.036257553026578515 1.436302450397106
-  position -0.7813691014118661 0.028032907999805873 -0.05770358893170219
+  orientation 0.036570287555645536 0.9425200965633947 0.33214226115058965 3.091906644080207
+  position -0.18581911731534714 0.3893258365103892 -0.6039496962449188
 }
 TexturedBackground {
 }
@@ -20,10 +20,61 @@ TexturedBackgroundLight {
 }
 RectangleArena {
   translation 0 -0.15 0
+  wallHeight 0.01
 }
 Robot {
+  translation 0.00011786187612435217 -0.11156753378432274 0.004699702697000391
+  rotation -0.9999741898484673 0.007094030625675459 0.001137702238612001 0.027463651128473897
   children [
-    Solid {
+    DEF Spacer_4 Solid {
+      translation 0.066 0.025 0.067
+      children [
+        Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(6)"
+    }
+    DEF Spacer_3 Solid {
+      translation -0.066 0.025 0.067
+      children [
+        Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(5)"
+    }
+    DEF Spacer_2 Solid {
+      translation -0.066 0.025 0
+      children [
+        Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(4)"
+    }
+    DEF Spacer_1 Solid {
+      translation 0.066 0.025 0
+      children [
+        Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(3)"
+    }
+    DEF Castor_Wheel Solid {
       translation 0 -0.025 0.041
       children [
         Shape {
@@ -77,6 +128,7 @@ Robot {
     }
     DEF LEFT HingeJoint {
       jointParameters HingeJointParameters {
+        position -2.578546101710332e-09
         anchor 0.0775 -0.005 -0.0403
       }
       device [
@@ -85,8 +137,8 @@ Robot {
         }
       ]
       endPoint DEF WHEEL_LEFT Solid {
-        translation 0.0775 -0.005 -0.04035
-        rotation 0 0 1 1.57
+        translation 0.0775 -0.005000000000128927 -0.04035
+        rotation -1.2903001425360896e-09 1.289273050855166e-09 1 1.57
         children [
           DEF WHEEL Shape {
             geometry Cylinder {
@@ -98,10 +150,13 @@ Robot {
         boundingObject USE WHEEL
         physics DEF WHEEL_PH Physics {
         }
+        linearVelocity -3.4223628650915275e-09 7.283403868752507e-07 2.657329217559829e-07
+        angularVelocity 8.176235490648047e-06 -9.420405065358552e-09 -4.4240728410478035e-07
       }
     }
     DEF RIGHT HingeJoint {
       jointParameters HingeJointParameters {
+        position 2.0781790328200084e-09
         anchor -0.0775 -0.005 -0.0403
       }
       device [
@@ -111,16 +166,20 @@ Robot {
       ]
       endPoint Solid {
         translation -0.0775 -0.005 -0.0403
-        rotation 0 0 1 1.57
+        rotation 1.0399173008714352e-09 -1.0390895164100044e-09 1 1.57
         children [
           USE WHEEL
         ]
         boundingObject USE WHEEL
         physics USE WHEEL_PH
+        linearVelocity 3.2141903130042894e-08 7.965149868052459e-07 2.6724499151060777e-07
+        angularVelocity 8.22294083463268e-06 -9.420315614647071e-09 -4.412616478943832e-07
       }
     }
   ]
   boundingObject USE BOT_LAYER
   physics Physics {
   }
+  linearVelocity 1.346975110005318e-08 4.1132936959512737e-07 1.227724664666026e-07
+  angularVelocity 8.202319207138636e-06 -9.391635293702472e-09 -4.418392212915962e-07
 }
