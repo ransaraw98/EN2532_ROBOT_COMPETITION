@@ -13,14 +13,14 @@ WorldInfo {
 Viewpoint {
   orientation -0.29511042154290457 -0.9405876792659559 -0.16794242081693497 0.3322423397566391
   position -0.11993970814494886 -0.014196724169070016 0.46460133379721796
+
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  translation 0 -0.15 0
-  wallHeight 0.01
+  translation 0 -0.04 0
 }
 Robot {
   translation 0.00011786187612435217 -0.11156753378432274 0.004699702697000391
@@ -174,7 +174,28 @@ Robot {
       ]
       name "solid(3)"
     }
-    DEF Castor_Wheel Solid {
+    
+    DistanceSensor {
+      translation 0 0.005 0.0825
+      rotation 0 1 0 -1.57
+      children [
+        DEF IR Shape {
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "front_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics Physics {
+      }
+    }
+    DEF CASTER Solid {
+
       translation 0 -0.025 0.041
       children [
         Shape {
@@ -250,6 +271,7 @@ Robot {
             }
           }
         ]
+        name "left_wheel"
         boundingObject USE WHEEL
         physics DEF WHEEL_PH Physics {
         }
@@ -271,6 +293,7 @@ Robot {
         children [
           USE WHEEL
         ]
+        name "right_wheel"
         boundingObject USE WHEEL
         physics USE WHEEL_PH
       }
@@ -282,5 +305,6 @@ Robot {
   recognitionColors [
     0 0 0
   ]
+
   controller "my_controller1"
 }
