@@ -3,6 +3,10 @@ WorldInfo {
   coordinateSystem "NUE"
   contactProperties [
     ContactProperties {
+      material1 "box"
+      material2 "gripper_material"
+    }
+    ContactProperties {
       material2 "CASTER"
       coulombFriction [
         0
@@ -11,8 +15,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.6236835099033763 -0.12278999200128328 -0.7719724718789717 0.28090010244048247
-  position -0.1500215820798061 0.15535952396773592 0.773168245208145
+  orientation -0.761938231618366 -0.4665548856880009 -0.44919558083192856 0.7522968448466315
+  position 0.04256989643964487 0.6233926908649078 0.7108917527422511
 }
 TexturedBackground {
 }
@@ -174,10 +178,13 @@ Robot {
       name "solid(3)"
     }
     DistanceSensor {
-      translation 0 0.005 0.0825
+      translation 0 -0.015 0.0815
       rotation 0 1 0 -1.57
       children [
         DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
           geometry Box {
             size 0.01 0.01 0.025
           }
@@ -260,9 +267,7 @@ Robot {
     }
     DEF LEFT HingeJoint {
       jointParameters HingeJointParameters {
-
         position -2.578546101710332e-09
-
         anchor 0.0775 -0.005 -0.0403
       }
       device [
@@ -285,8 +290,6 @@ Robot {
         boundingObject USE WHEEL
         physics DEF WHEEL_PH Physics {
         }
-        linearVelocity -8.027580291973349e-11 1.6069953788076055e-08 8.384665012999956e-10
-        angularVelocity 2.6393300103990857e-08 -9.777264613949215e-09 2.5663668841001534e-09
       }
     }
     DEF RIGHT HingeJoint {
@@ -308,8 +311,6 @@ Robot {
         name "right_wheel"
         boundingObject USE WHEEL
         physics USE WHEEL_PH
-        linearVelocity 7.28269149484224e-11 1.6567927636942968e-08 -7.577861608743721e-10
-        angularVelocity -2.3926709429413315e-08 -9.778083889236294e-09 -2.336611935889972e-09
       }
     }
     Transform {
@@ -369,7 +370,7 @@ Robot {
                               endPoint Solid {
                                 translation -0.05500000000000001 0 0
                                 children [
-                                  Transform {
+                                  DEF right_tooth Transform {
                                     translation 0 -2.91896e-07 0.02
                                     rotation 1 0 0 3.14159
                                     children [
@@ -419,6 +420,10 @@ Robot {
                                   }
                                 ]
                                 name "solid(1)"
+                                contactMaterial "gripper_material"
+                                boundingObject USE right_tooth
+                                physics Physics {
+                                }
                               }
                             }
                             SliderJoint {
@@ -434,7 +439,7 @@ Robot {
                               endPoint Solid {
                                 translation 0.05500000000000001 0 0
                                 children [
-                                  Transform {
+                                  DEF left_tooth Transform {
                                     translation 0 -0.00999998 0.0199999
                                     rotation -1.20931e-06 1 -8.57842e-07 -3.1415853071795863
                                     children [
@@ -484,6 +489,10 @@ Robot {
                                   }
                                 ]
                                 name "solid(2)"
+                                contactMaterial "gripper_material"
+                                boundingObject USE left_tooth
+                                physics Physics {
+                                }
                               }
                             }
                           ]
@@ -514,6 +523,21 @@ Robot {
   physics Physics {
   }
   controller "Servo1_test"
-  linearVelocity -4.0653173151332827e-10 -1.629144975349222e-11 9.28890015651843e-13
-  angularVelocity -2.5689024492448294e-10 -9.781077751396981e-09 -4.954018061823628e-11
+}
+DEF box Solid {
+  translation -0.00301183 -0.01 0.160952
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0.666667 0.333333 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  contactMaterial "box"
+  boundingObject USE box
+  physics Physics {
+  }
 }
