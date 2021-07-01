@@ -11,9 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.29511042154290457 -0.9405876792659559 -0.16794242081693497 0.3322423397566391
-  position -0.11993970814494886 -0.014196724169070016 0.46460133379721796
-
+  orientation -0.6236835099033763 -0.12278999200128328 -0.7719724718789717 0.28090010244048247
+  position -0.1500215820798061 0.15535952396773592 0.773168245208145
 }
 TexturedBackground {
 }
@@ -23,10 +22,10 @@ RectangleArena {
   translation 0 -0.04 0
 }
 Robot {
-  translation 0.00011786187612435217 -0.11156753378432274 0.004699702697000391
+  translation 0.000114133 -0.00160927 0.0016792
   rotation -0.9999741898484673 0.007094030625675459 0.001137702238612001 0.027463651128473897
   children [
-    Solid {
+    DEF motor1 Solid {
       translation 0 -0.02 0
       rotation 0 1 0 4.692820414042842e-06
       children [
@@ -174,7 +173,6 @@ Robot {
       ]
       name "solid(3)"
     }
-    
     DistanceSensor {
       translation 0 0.005 0.0825
       rotation 0 1 0 -1.57
@@ -195,7 +193,6 @@ Robot {
       }
     }
     DEF CASTER Solid {
-
       translation 0 -0.025 0.041
       children [
         Shape {
@@ -305,6 +302,5 @@ Robot {
   recognitionColors [
     0 0 0
   ]
-
   controller "my_controller1"
 }
