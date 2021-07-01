@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.07574956600253095 -0.9818116366321067 -0.17409168108847847 4.549848454732437
-  position 0.5445829604576001 0.102377580504851 -0.03742715273589689
+  orientation 0.9232062419328065 -0.21911987089540488 0.3157161969793207 5.868761579802145
+  position 0.0740495882138677 0.21974470973914173 0.5088046762869287
 }
 TexturedBackground {
 }
@@ -27,18 +27,18 @@ Robot {
   rotation -0.9999741898484673 0.007094030625675459 0.001137702238612001 0.027463651128473897
   children [
     DEF Upper_Platform Solid {
-      translation 0 0.052 0.0335
+      translation 0 0.052 -0.036
       children [
         Shape {
           geometry Box {
-            size 0.14 0.004 0.075
+            size 0.17 0.005 0.115
           }
         }
       ]
       name "solid(7)"
     }
     DEF Spacer_4 Solid {
-      translation 0.066 0.025 0.067
+      translation 0.08 0.025 0.009
       children [
         Shape {
           geometry Cylinder {
@@ -50,7 +50,7 @@ Robot {
       name "solid(6)"
     }
     DEF Spacer_3 Solid {
-      translation -0.066 0.025 0.067
+      translation -0.08 0.025 0.009
       children [
         Shape {
           geometry Cylinder {
@@ -62,7 +62,7 @@ Robot {
       name "solid(5)"
     }
     DEF Spacer_2 Solid {
-      translation -0.066 0.025 0
+      translation -0.08 0.025 -0.08
       children [
         Shape {
           geometry Cylinder {
@@ -74,7 +74,7 @@ Robot {
       name "solid(4)"
     }
     DEF Spacer_1 Solid {
-      translation 0.066 0.025 0
+      translation 0.08 0.025 -0.08
       children [
         Shape {
           geometry Cylinder {
@@ -161,8 +161,6 @@ Robot {
         boundingObject USE WHEEL
         physics DEF WHEEL_PH Physics {
         }
-        linearVelocity -3.4223628650915275e-09 7.283403868752507e-07 2.657329217559829e-07
-        angularVelocity 8.176235490648047e-06 -9.420405065358552e-09 -4.4240728410478035e-07
       }
     }
     DEF RIGHT HingeJoint {
@@ -183,8 +181,6 @@ Robot {
         ]
         boundingObject USE WHEEL
         physics USE WHEEL_PH
-        linearVelocity 3.2141903130042894e-08 7.965149868052459e-07 2.6724499151060777e-07
-        angularVelocity 8.22294083463268e-06 -9.420315614647071e-09 -4.412616478943832e-07
       }
     }
   ]
