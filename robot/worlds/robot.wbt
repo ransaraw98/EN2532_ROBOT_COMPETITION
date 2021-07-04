@@ -15,20 +15,251 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.881985478489689 0.10938479230921178 0.45840656948257735 5.364657634754209
-  position 0.2953990228929512 0.6505845012783377 0.7263346617992334
+  orientation 0.20333775297949602 0.9712668125461659 0.12367108416950492 5.164264798565046
+  position -0.22990363089114163 0.26569240160872737 -0.03029014362540801
 }
 TexturedBackground {
 }
-TexturedBackgroundLight {
+arena_floor {
 }
-RectangleArena {
-  translation 0 -0.13 0
+DEF Arena_track track {
+}
+DEF Arena_walls walls {
 }
 Robot {
-  translation -0.023156357605989168 -0.07725909014746778 -0.12128598769441044
-  rotation 0.021036751460598628 0.9995162484962735 -0.022906856613706648 1.684333296554056
+  translation 0.159999 0.0551 -0.12
+  rotation 0 1 0 1.5708
   children [
+    DEF IR_PANEL Transform {
+      translation 0 -0.03 0.03
+      children [
+        Solid {
+          translation 0.03 0.01175 0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer"
+        }
+        Solid {
+          translation 0.03 0.01175 -0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(1)"
+        }
+        Solid {
+          translation -0.03 0.01175 0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(2)"
+        }
+        Solid {
+          translation -0.03 0.01175 -0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(3)"
+        }
+        DistanceSensor {
+          translation 0.0334 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr0"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0239 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr1"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0144 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr2"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0049 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr3"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0056 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr4"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0151 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr5"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0246 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr6"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0341 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr3(5)"
+          type "infra-red"
+        }
+        Solid {
+          children [
+            DEF ip_PCB Shape {
+              appearance PBRAppearance {
+              }
+              geometry Box {
+                size 0.075 0.00157 0.0127
+              }
+            }
+          ]
+          name "sensor_panel_PCB"
+          boundingObject USE ip_PCB
+          physics Physics {
+            density -1
+            mass 0.005
+          }
+        }
+      ]
+    }
     DEF MOTOR_DRIVER Solid {
       translation 0 0.005 0
       children [
@@ -253,7 +484,7 @@ Robot {
       }
     }
     DEF CASTER Solid {
-      translation 0 -0.025 0.041
+      translation 0 -0.025 0.06
       children [
         Solid {
           translation 0 -0.015 0
@@ -385,8 +616,6 @@ Robot {
           density -1
           mass 0.1
         }
-        linearVelocity 2.5743256061466356e-07 1.2673675662711047e-07 -2.9225140123018387e-08
-        angularVelocity -8.996772929504218e-07 -7.519399849566295e-09 -7.924908219031903e-06
       }
     }
     DEF RIGHT HingeJoint {
@@ -408,8 +637,6 @@ Robot {
         name "right_wheel"
         boundingObject USE WHEEL
         physics USE WHEEL_PH
-        linearVelocity 2.5563230025043106e-07 1.268348577099232e-07 -2.9020932627671588e-08
-        angularVelocity -8.930180919104227e-07 -7.55787952216891e-09 -7.866249658274237e-06
       }
     }
     Transform {
@@ -428,7 +655,7 @@ Robot {
           ]
           endPoint DEF Servo_block2 Solid {
             translation -0.018599999999999995 -0.0064421778263208255 0.007648421069348908
-            rotation -1 0 0 0.39999987527571246
+            rotation -1 0 0 1.9708
             children [
               Transform {
                 translation 0 0 0.0155
@@ -534,8 +761,6 @@ Robot {
                                 physics Physics {
                                   mass 0.01875
                                 }
-                                linearVelocity 6.045328106048763e-07 -1.3428019026522467e-06 -6.722684141872813e-08
-                                angularVelocity -8.968526387142976e-07 -7.524010301388648e-09 -7.900028886930277e-06
                               }
                             }
                             SliderJoint {
@@ -606,8 +831,6 @@ Robot {
                                 physics Physics {
                                   mass 0.01875
                                 }
-                                linearVelocity 5.774829671050798e-07 -1.353023067503027e-06 -6.414626174279352e-08
-                                angularVelocity -8.968526486573351e-07 -7.524184007408925e-09 -7.900028870794666e-06
                               }
                             }
                           ]
@@ -622,8 +845,6 @@ Robot {
                       physics Physics {
                         mass 0.0147
                       }
-                      linearVelocity 5.376130702318091e-07 -1.088149426700922e-06 -5.987232839945401e-08
-                      angularVelocity -8.968526318698833e-07 -7.52409575924406e-09 -7.900028850612521e-06
                     }
                   }
                 ]
@@ -639,8 +860,6 @@ Robot {
             physics Physics {
               mass 0.048
             }
-            linearVelocity 4.199663941543866e-07 -7.674598379394721e-07 -4.6821777149768414e-08
-            angularVelocity -8.968537293154131e-07 -7.531170854756406e-09 -7.900040492541434e-06
           }
         }
       ]
@@ -650,8 +869,6 @@ Robot {
   physics Physics {
   }
   controller "Servo1_test"
-  linearVelocity 3.750157693945865e-07 -2.402753755340466e-07 -4.222151761698489e-08
-  angularVelocity -8.968548155410306e-07 -7.538973594852919e-09 -7.900046699040152e-06
 }
 DEF box Solid {
   translation 0.21376895785671013 -0.1050490785239924 -0.1282828669113337
@@ -672,4 +889,6 @@ DEF box Solid {
   }
   linearVelocity 1.8181601759623798e-07 2.2291192159287116e-07 1.1235143930572524e-07
   angularVelocity 4.494046621399576e-06 8.621753194956272e-16 -7.2726229833771114e-06
+}
+DEF Light light {
 }
