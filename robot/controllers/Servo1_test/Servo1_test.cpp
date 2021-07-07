@@ -2,14 +2,54 @@
 #include <webots/Motor.hpp>
 #include <webots/Robot.hpp>
 #include <webots/Keyboard.hpp>
-
+#include <webots/DistanceSensor.hpp>
 
 
 #define TIME_STEP 64
+#define nQTR 8
 using namespace webots;
+unsigned int qtrValues[8] ={0,0,0,0,0,0,0,0};
+Robot *robot = new Robot();
+DistanceSensor *QTR[nQTR];
+Motor *wheels[2];
+char QTR_names[nQTR][6]= {"qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7"};
+char wheels_names[2][12] = {"right_motor", "left_motor"};
+bool lineFollow = 0;
 
-int main() {
-  Robot *robot = new Robot();
+
+
+
+void readQTR(){
+  for (int i=0;i<8;i++){
+    qtrValues[i] = QTR[i]->getValue();         
+  }
+}
+
+
+
+
+int main(int argc,char **argv) {
+
+  
+
+  
+  /////////////////////////////INITIALIZING QTR ARRAY///////////////////////////////
+  for(int i = 0; i < 2; i++) {
+    QTR[i] = robot->getDistanceSensor(QTR_names[i]);
+    QTR[i]->enable(TIME_STEP);
+  }
+  
+
+//////////////////////////INITIALIZING DRIVE MOTORS///////////////////////////////
+  for (int i = 0; i < 2; i++) {
+    wheels[i] = robot->getMotor(wheels_names[i]);
+    wheels[i]->setPosition(INFINITY);
+    wheels[i]->setVelocity(0.0);
+}
+  
+
+/////////////////////////////////////ARM/////////////////////////////////////////
+  
   Keyboard kb;
  
   Motor *Sr_1;
@@ -27,6 +67,9 @@ int main() {
   double linear=0.0;
 
   while (robot->step(TIME_STEP) != -1) {
+  readQTR();
+      printf("%4d   %4d    %4d    %4d    %4d    %4d    %4d    %4d\n",qtrValues[0],qtrValues[1],qtrValues[2],qtrValues[3],qtrValues[4],qtrValues[5],qtrValues[6],qtrValues[7]);
+  /////////////////////////////////////ARM/////////////////////////////////////////
     int key=kb.getKey();
   
     // std::cout<<ds[0]->getValue()<<"=Right Sensor"<<std::endl;

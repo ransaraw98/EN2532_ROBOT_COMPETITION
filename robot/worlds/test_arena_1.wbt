@@ -3,11 +3,7 @@ WorldInfo {
   coordinateSystem "NUE"
   contactProperties [
     ContactProperties {
-      material1 "box"
-      material2 "gripper_material"
-    }
-    ContactProperties {
-      material2 "CASTER"
+      material1 "CASTER"
       coulombFriction [
         0
       ]
@@ -15,30 +11,83 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.43509176964289364 0.8696948165975507 0.23307955288349044 4.598145559616084
-  position -2.935963656192316 3.3962484419073404 -0.9281225041484871
+  orientation 0.3737212108873428 0.8472084083598072 0.3775849167238283 4.495740268540548
+  position -1.1084519444911334 2.3211775518956683 -0.45581825311171587
 }
 TexturedBackground {
 }
-arena_floor {
+TexturedBackgroundLight {
+  luminosity 0.3
 }
-DEF Arena_track track {
+Floor {
+  translation 1 0 -2.5
+  size 4 6
+  appearance Parquetry {
+    type "dark strip"
+    colorOverride 0 0 0
+  }
 }
-DEF Arena_walls walls {
+DEF Light SpotLight {
+  attenuation 0 0 1
+  beamWidth 1.5
+  cutOffAngle 1.57
+  direction 0 -1 0
+  intensity 10
+  location 1 3.8 -2.5
+  radius 10
+  castShadows TRUE
+}
+DEF Arena_walls Solid {
+  rotation 1 0 0 -1.5707953071795862
+  scale 0.01 0.01 0.01
+  children [
+    DEF WALLS Shape {
+      appearance PBRAppearance {
+        baseColor 0.666667 0.333333 0
+        roughness 0.9
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "wall1.stl"
+        ]
+      }
+    }
+  ]
+  name "WALLS"
+  boundingObject USE WALLS
+}
+DEF Arena_track Solid {
+  rotation 1 0 0 -1.5707953071795862
+  scale 0.01 0.01 0.01
+  children [
+    DEF TRACK Shape {
+      appearance PBRAppearance {
+        roughness 0.9
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "samplearena3.stl"
+        ]
+      }
+    }
+  ]
+  name "TRACK"
 }
 Robot {
-  translation 0.159999 0.0551 -0.12
-  rotation 0 1 0 1.5708
+  translation 0.108355 0.0548985 -0.122776
+  rotation -0.00023065097392822688 -0.9999998869644046 -0.0004157779530022862 -1.5707953071795862
   children [
     DEF IR_PANEL Transform {
-      translation 0 -0.03 0.03
+      translation 0.0045 -0.045 0.03
       children [
         Solid {
-          translation 0.03 0.01175 0.004
+          translation 0.03 0.0225 0.004
           children [
             Shape {
               geometry Cylinder {
-                height 0.0235
+                height 0.045
                 radius 0.001
               }
             }
@@ -46,11 +95,11 @@ Robot {
           name "spacer"
         }
         Solid {
-          translation 0.03 0.01175 -0.004
+          translation 0.03 0.0225 -0.004
           children [
             Shape {
               geometry Cylinder {
-                height 0.0235
+                height 0.045
                 radius 0.001
               }
             }
@@ -58,11 +107,11 @@ Robot {
           name "spacer(1)"
         }
         Solid {
-          translation -0.03 0.01175 0.004
+          translation -0.03 0.0225 0.004
           children [
             Shape {
               geometry Cylinder {
-                height 0.0235
+                height 0.045
                 radius 0.001
               }
             }
@@ -70,11 +119,11 @@ Robot {
           name "spacer(2)"
         }
         Solid {
-          translation -0.03 0.01175 -0.004
+          translation -0.03 0.0225 -0.004
           children [
             Shape {
               geometry Cylinder {
-                height 0.0235
+                height 0.045
                 radius 0.001
               }
             }
@@ -104,6 +153,7 @@ Robot {
             0.04 1000 0.01
           ]
           type "infra-red"
+          aperture 1
         }
         DistanceSensor {
           translation 0.0239 -0.001 0
@@ -124,7 +174,7 @@ Robot {
           ]
           name "qtr1"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -148,7 +198,7 @@ Robot {
           ]
           name "qtr2"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -172,7 +222,7 @@ Robot {
           ]
           name "qtr3"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -196,7 +246,7 @@ Robot {
           ]
           name "qtr4"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -220,7 +270,7 @@ Robot {
           ]
           name "qtr5"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -244,7 +294,7 @@ Robot {
           ]
           name "qtr6"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -268,7 +318,7 @@ Robot {
           ]
           name "qtr7"
           lookupTable [
-            0 0 1
+            0 0 0.01
             0.04 1000 0.01
           ]
           type "infra-red"
@@ -484,7 +534,7 @@ Robot {
           }
         }
       ]
-      name "solid(3)"
+      name "solid(5)"
       boundingObject USE spacer
       physics Physics {
         density -1
@@ -519,7 +569,7 @@ Robot {
       translation 0 -0.025 0.06
       children [
         Solid {
-          translation 0 -0.015 0
+          translation 0 -0.018 0
           children [
             DEF caster_ball Shape {
               appearance PBRAppearance {
@@ -547,7 +597,7 @@ Robot {
                 baseColor 0 0 0
               }
               geometry Cylinder {
-                height 0.03
+                height 0.035
                 radius 0.015
               }
             }
@@ -623,7 +673,7 @@ Robot {
     }
     DEF LEFT HingeJoint {
       jointParameters HingeJointParameters {
-        position 42.11196316910261
+        position 42.11196320223189
         anchor 0.0775 -0.0225 -0.0403
       }
       device [
@@ -632,10 +682,12 @@ Robot {
         }
       ]
       endPoint DEF WHEEL_LEFT Solid {
-        translation 0.0775 -0.022547773694127932 -0.040285246062836386
-        rotation 0.6272273821042532 -0.6267281029017095 -0.4623826296173647 4.008406465509853
+        translation 0.0775 -0.022547773694616722 -0.040285246064419106
+        rotation 0.627227377454589 -0.6267280982557457 -0.4623826422219748 4.008406486289448
         children [
           DEF WHEEL Shape {
+            appearance PBRAppearance {
+            }
             geometry Cylinder {
               height 0.025
               radius 0.0325
@@ -652,7 +704,7 @@ Robot {
     }
     DEF RIGHT HingeJoint {
       jointParameters HingeJointParameters {
-        position 16.51202104101037
+        position 16.512021051021286
         anchor -0.0775 -0.0225 -0.0403
       }
       device [
@@ -661,8 +713,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0775 -0.022499999973808492 -0.04030000002523185
-        rotation 0.6774556609020015 -0.6769163994925284 -0.2878159405069566 3.702499355831198
+        translation -0.0775 -0.022499999973808485 -0.04030000002523184
+        rotation 0.677455660121911 -0.6769163987130592 -0.2878159441763579 3.702499362613149
         children [
           USE WHEEL
         ]
@@ -676,7 +728,7 @@ Robot {
       children [
         DEF Servo1 HingeJoint {
           jointParameters HingeJointParameters {
-            position -0.39999987527571257
+            position -0.39999991712190397
           }
           device [
             RotationalMotor {
@@ -686,15 +738,15 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018600000000000016 -0.0064421778263208385 0.0076484210693489214
-            rotation -1 0 0 1.9707999999999986
+            translation -0.018599999999999874 -0.006442177506263533 0.007648421338929514
+            rotation -1 0 0 1.9708000418461875
             children [
               Transform {
                 translation 0 0 0.0155
                 children [
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      position -0.09999999943939353
+                      position -0.09999997929419814
                       axis 0 0 1
                     }
                     device [
@@ -705,8 +757,8 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 0 0 0.01599999999999992
-                      rotation 0 0 -1 0.09999999943939547
+                      translation 0 0 0.01599999999999987
+                      rotation 0 0 -1 0.09999997929419721
                       children [
                         Transform {
                           translation 0 0 0.016
@@ -727,7 +779,7 @@ Robot {
                             }
                             SliderJoint {
                               jointParameters JointParameters {
-                                position 0.03000005605508979
+                                position 0.03000004878387312
                                 axis 1 0 0
                               }
                               device [
@@ -736,7 +788,7 @@ Robot {
                                 }
                               ]
                               endPoint Solid {
-                                translation -0.019999943944910212 0 0
+                                translation -0.019999951216126882 0 0
                                 children [
                                   DEF right_tooth Transform {
                                     translation 0 -2.91896e-07 0.02
@@ -797,7 +849,7 @@ Robot {
                             }
                             SliderJoint {
                               jointParameters JointParameters {
-                                position -0.02999994394490988
+                                position -0.029999951215893463
                                 axis 1 0 0
                               }
                               device [
@@ -806,7 +858,7 @@ Robot {
                                 }
                               ]
                               endPoint Solid {
-                                translation 0.020000056055090122 0 0
+                                translation 0.02000004878410654 0 0
                                 children [
                                   DEF left_tooth Transform {
                                     translation 0 -0.00999998 0.0199999
@@ -901,24 +953,4 @@ Robot {
   physics Physics {
   }
   controller "lineFollowTest"
-}
-DEF box Solid {
-  translation 2.2269 -0.105049 -3.86217
-  rotation -0.2651723168727626 0.6817931654622795 0.6817930198331866 2.623180660317604
-  children [
-    DEF box Shape {
-      appearance PBRAppearance {
-        baseColor 0.666667 0.333333 0
-      }
-      geometry Box {
-        size 0.05 0.05 0.05
-      }
-    }
-  ]
-  contactMaterial "box"
-  boundingObject USE box
-  physics Physics {
-  }
-}
-DEF Light light {
 }

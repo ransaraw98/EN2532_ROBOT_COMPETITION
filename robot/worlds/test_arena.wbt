@@ -1,30 +1,71 @@
 #VRML_SIM R2021a utf8
 WorldInfo {
   coordinateSystem "NUE"
-  contactProperties [
-    ContactProperties {
-      material1 "box"
-      material2 "gripper_material"
-    }
-    ContactProperties {
-      material2 "CASTER"
-      coulombFriction [
-        0
-      ]
-    }
-  ]
 }
 Viewpoint {
-  orientation 0.43509176964289364 0.8696948165975507 0.23307955288349044 4.598145559616084
-  position -2.935963656192316 3.3962484419073404 -0.9281225041484871
+  orientation -0.9180872014601615 0.34796622407832245 -0.1898299170724241 6.192231758955345
+  position 0.2086731151434577 0.04630896976414446 0.34154459272671983
 }
 TexturedBackground {
 }
-arena_floor {
+TexturedBackgroundLight {
+  luminosity 0.3
 }
-DEF Arena_track track {
+Floor {
+  translation 1 0 -2.5
+  size 4 6
+  appearance Parquetry {
+    type "dark strip"
+    colorOverride 0 0 0
+  }
 }
-DEF Arena_walls walls {
+DEF Light SpotLight {
+  attenuation 0 0 1
+  beamWidth 1.5
+  cutOffAngle 1.57
+  direction 0 -1 0
+  intensity 10
+  location 1 3.8 -2.5
+  radius 10
+  castShadows TRUE
+}
+DEF Arena_walls Solid {
+  rotation 1 0 0 -1.5707953071795862
+  scale 0.01 0.01 0.01
+  children [
+    DEF WALLS Shape {
+      appearance PBRAppearance {
+        baseColor 0.666667 0.333333 0
+        roughness 0.9
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "wall1.stl"
+        ]
+      }
+    }
+  ]
+  name "WALLS"
+  boundingObject USE WALLS
+}
+DEF Arena_track Solid {
+  rotation 1 0 0 -1.5707953071795862
+  scale 0.01 0.01 0.01
+  children [
+    DEF TRACK Shape {
+      appearance PBRAppearance {
+        roughness 0.9
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "samplearena3.stl"
+        ]
+      }
+    }
+  ]
+  name "TRACK"
 }
 Robot {
   translation 0.159999 0.0551 -0.12
@@ -484,7 +525,7 @@ Robot {
           }
         }
       ]
-      name "solid(3)"
+      name "solid(5)"
       boundingObject USE spacer
       physics Physics {
         density -1
@@ -519,7 +560,7 @@ Robot {
       translation 0 -0.025 0.06
       children [
         Solid {
-          translation 0 -0.015 0
+          translation 0 -0.018 0
           children [
             DEF caster_ball Shape {
               appearance PBRAppearance {
@@ -547,7 +588,7 @@ Robot {
                 baseColor 0 0 0
               }
               geometry Cylinder {
-                height 0.03
+                height 0.035
                 radius 0.015
               }
             }
@@ -633,7 +674,7 @@ Robot {
       ]
       endPoint DEF WHEEL_LEFT Solid {
         translation 0.0775 -0.022547773694127932 -0.040285246062836386
-        rotation 0.6272273821042532 -0.6267281029017095 -0.4623826296173647 4.008406465509853
+        rotation 0.6272273821042533 -0.6267281029017094 -0.4623826296173647 4.008406465509854
         children [
           DEF WHEEL Shape {
             geometry Cylinder {
@@ -661,8 +702,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0775 -0.022499999973808492 -0.04030000002523185
-        rotation 0.6774556609020015 -0.6769163994925284 -0.2878159405069566 3.702499355831198
+        translation -0.0775 -0.022499999973808495 -0.04030000002523185
+        rotation 0.6774556609020014 -0.6769163994925284 -0.28781594050695664 3.7024993558311983
         children [
           USE WHEEL
         ]
@@ -686,8 +727,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018600000000000016 -0.0064421778263208385 0.0076484210693489214
-            rotation -1 0 0 1.9707999999999986
+            translation -0.01860000000000001 -0.00644217782632084 0.007648421069348922
+            rotation -1 0 0 1.9707999999999988
             children [
               Transform {
                 translation 0 0 0.0155
@@ -705,7 +746,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 0 0 0.01599999999999992
+                      translation 0 0 0.015999999999999886
                       rotation 0 0 -1 0.09999999943939547
                       children [
                         Transform {
@@ -901,24 +942,4 @@ Robot {
   physics Physics {
   }
   controller "lineFollowTest"
-}
-DEF box Solid {
-  translation 2.2269 -0.105049 -3.86217
-  rotation -0.2651723168727626 0.6817931654622795 0.6817930198331866 2.623180660317604
-  children [
-    DEF box Shape {
-      appearance PBRAppearance {
-        baseColor 0.666667 0.333333 0
-      }
-      geometry Box {
-        size 0.05 0.05 0.05
-      }
-    }
-  ]
-  contactMaterial "box"
-  boundingObject USE box
-  physics Physics {
-  }
-}
-DEF Light light {
 }
