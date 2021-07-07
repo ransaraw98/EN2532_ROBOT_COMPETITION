@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.3737212108873428 0.8472084083598072 0.3775849167238283 4.495740268540548
-  position -1.1084519444911334 2.3211775518956683 -0.45581825311171587
+  orientation -0.5821742993817799 0.6561441033684098 0.4801541427023191 1.7639254335351817
+  position 2.2724876646434407 2.6085120231613406 -0.3553736132311145
 }
 TexturedBackground {
 }
@@ -76,9 +76,28 @@ DEF Arena_track Solid {
   name "TRACK"
 }
 Robot {
-  translation 0.108355 0.0548985 -0.122776
-  rotation -0.00023065097392822688 -0.9999998869644046 -0.0004157779530022862 -1.5707953071795862
+  translation 1.77442 0.0552099 -0.17645
+  rotation 0.00023065097392841868 0.9999998869652361 0.00041577595300285806 1.5708
   children [
+    InertialUnit {
+      translation 0.05 0 0
+      rotation 0 1 0 -1.57
+      children [
+        Solid {
+          children [
+            Shape {
+              appearance PBRAppearance {
+              }
+              geometry Box {
+                size 0.01 0.001 0.01
+              }
+            }
+          ]
+        }
+      ]
+      name "inertial_unit"
+      resolution 0.001
+    }
     DEF IR_PANEL Transform {
       translation 0.0045 -0.045 0.03
       children [
@@ -713,8 +732,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.0775 -0.022499999973808485 -0.04030000002523184
-        rotation 0.677455660121911 -0.6769163987130592 -0.2878159441763579 3.702499362613149
+        translation -0.0775 -0.02249999997380849 -0.04030000002523184
+        rotation 0.6774556601219112 -0.6769163987130592 -0.2878159441763579 3.7024993626131493
         children [
           USE WHEEL
         ]
@@ -738,8 +757,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018599999999999874 -0.006442177506263533 0.007648421338929514
-            rotation -1 0 0 1.9708000418461875
+            translation -0.018599999999999617 -0.00644217750626353 0.007648421338929505
+            rotation -1 0 0 1.970800041846187
             children [
               Transform {
                 translation 0 0 0.0155
@@ -757,7 +776,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 0 0 0.01599999999999987
+                      translation 0 0 0.01599999999999986
                       rotation 0 0 -1 0.09999997929419721
                       children [
                         Transform {
@@ -952,5 +971,5 @@ Robot {
   boundingObject USE BOT_LAYER
   physics Physics {
   }
-  controller "lineFollowTest"
+  controller "fF"
 }

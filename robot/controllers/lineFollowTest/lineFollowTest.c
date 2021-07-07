@@ -14,6 +14,7 @@
 #include <webots/distance_sensor.h>
 #include <webots/motor.h>
 #include <stdio.h>
+#include <webots/gyro.h>
 // * You may want to add macros here.
 
 #define TIME_STEP 16
@@ -41,10 +42,12 @@ float pEr = 0;
 float baseSpeed = 400;  //  rad/s
 float Speeds[2] = {0,0};
 float PID = 0;
-void ReadQTR(WbDeviceTag* QTRa); //function prototype
-void lineFollow(void);
+bool hardLeft,hardRight,Tjunc = 0;
 //void readQTR(WbDeviceTag* QTRarray); //function prototype
 
+WbDeviceTag QTR[nQTR];
+WbDeviceTag wheels[2];
+WbDeviceTag GYRO;
 /*
 void readQTR(WbDeviceTag *QTRarray) {
     for (int i = 0; i < 8; i++) {
@@ -52,6 +55,11 @@ void readQTR(WbDeviceTag *QTRarray) {
     }
 }
 */
+
+/* Function PROTOTYPES */
+void ReadQTR(WbDeviceTag* QTRa); 
+void lineFollow(void);
+
 
 
  
@@ -78,6 +86,43 @@ void ReadQTR(WbDeviceTag *QTRa){
         error[i] = 1000;//qtrNew[i] - 70;
     }
   }
+  if((error[1]==0)&&(error[2]==0)&&(error[3]==0)&&(error[4]==0)&&(error[5]==0)&&(error[6]==1000)&&(error[7]==1000)){
+  
+  hardLeft =1;
+  
+  }
+  else{
+  hardLeft =0;
+  }
+  if((error[1]==1000)&&(error[2]==1000)&&(error[3]==0)&&(error[4]==0)&&(error[5]==0)&&(error[6]==0)&&(error[7]==0)){
+  
+  hardRight =1;
+  
+  }
+  
+  
+}
+
+
+
+void hardLeftf (void){
+//double *currentW[3];
+
+
+if(hardLeft){
+double totalAngle=0;
+printf("HARDLEFT\n");
+wb_gyro_enable(GYRO,10);
+while (totalAngle<10){
+totalAngle+=  wb_gyro_get_values(GYRO)[1]*0.016;
+printf("angle %f\n",totalAngle);
+wb_motor_set_velocity(wheels[0], 0.5);
+wb_motor_set_velocity(wheels[1], 0);
+
+}
+
+}
+
 }
 
 void lineFollow(void) {
@@ -111,10 +156,7 @@ int main(int argc, char **argv) {
    *  WbDeviceTag my_sensor = wb_robot_get_device("my_sensor");
    *  WbDeviceTag my_actuator = wb_robot_get_device("my_actuator");
    */
-
-  WbDeviceTag QTR[nQTR];
-  WbDeviceTag wheels[2];
-
+  
   /*Initialize QTR Array*/
   for (int i = 0; i < 8; i++) {
       QTR[i] = wb_robot_get_device(QTR_names[i]);
@@ -129,6 +171,11 @@ int main(int argc, char **argv) {
       wb_motor_set_position(wheels[i],INFINITY);
       wb_motor_set_velocity(wheels[i], 0);
   }
+  
+  /*Initialize Gyro */
+  
+  GYRO = wb_robot_get_device("gyro");
+  
   /* main loop
    * Perform simulation steps of TIME_STEP milliseconds
    * and leave the loop when the simulation is over
@@ -143,6 +190,7 @@ int main(int argc, char **argv) {
       //readQTR(QTR);
       ReadQTR(QTR);
       lineFollow();
+      hardLeftf();
       wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
       wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
       printf("%4d   %4d    %4d    %4d    %4d    %4d    %4d    %4d\n", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);

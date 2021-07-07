@@ -1,0 +1,5 @@
+﻿  LINEFOLLOW2.c
+C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\FINAL_PROJECT\EN2532_ROBOT_COMPETITION\robot\controllers\LINEFOLLOW2\LINEFOLLOW2.c(69,61): warning C4244: '=': conversion from 'double' to 'unsigned int', possible loss of data
+C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\FINAL_PROJECT\EN2532_ROBOT_COMPETITION\robot\controllers\LINEFOLLOW2\LINEFOLLOW2.c(76,80): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\FINAL_PROJECT\EN2532_ROBOT_COMPETITION\robot\controllers\LINEFOLLOW2\LINEFOLLOW2.c(132,38): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+LINK : fatal error LNK1181: cannot open input file 'controller.lib'
