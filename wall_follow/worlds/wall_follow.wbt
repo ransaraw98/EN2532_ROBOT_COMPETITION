@@ -1,0 +1,953 @@
+#VRML_SIM R2021a utf8
+WorldInfo {
+  coordinateSystem "NUE"
+  contactProperties [
+    ContactProperties {
+      material1 "box"
+      material2 "gripper_material"
+    }
+    ContactProperties {
+      material2 "CASTER"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.6035297597266449 -0.5237418941705616 -0.6012040064860933 2.1734949376913097
+  position 1.5975760720092915 4.104518811054049 -0.6550337248248168
+}
+TexturedBackground {
+}
+arena_floor {
+}
+DEF Arena_track track {
+}
+DEF Arena_walls walls {
+}
+Robot {
+  translation 1.8996 0.0353112 -0.637414
+  rotation 0.015280399141864954 0.9997619438541655 0.015574499125348534 -1.563805307179586
+  children [
+    DEF IR_PANEL Transform {
+      translation 0 -0.03 0.03
+      children [
+        Solid {
+          translation 0.03 0.01175 0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer"
+        }
+        Solid {
+          translation 0.03 0.01175 -0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(1)"
+        }
+        Solid {
+          translation -0.03 0.01175 0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(2)"
+        }
+        Solid {
+          translation -0.03 0.01175 -0.004
+          children [
+            Shape {
+              geometry Cylinder {
+                height 0.0235
+                radius 0.001
+              }
+            }
+          ]
+          name "spacer(3)"
+        }
+        DistanceSensor {
+          translation 0.0334 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr0"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0239 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr1"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0144 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr2"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation 0.0049 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr3"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0056 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr4"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0151 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr5"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0246 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr6"
+          type "infra-red"
+        }
+        DistanceSensor {
+          translation -0.0341 -0.001 0
+          rotation 0 0 1 -1.57
+          children [
+            Solid {
+              translation 0 -0.001 0
+              rotation 0 0 1 -1.57
+              children [
+                Shape {
+                  geometry Box {
+                    size 0.003 0.001 0.003
+                  }
+                }
+              ]
+              name "qtr_body"
+            }
+          ]
+          name "qtr3(5)"
+          type "infra-red"
+        }
+        Solid {
+          children [
+            DEF ip_PCB Shape {
+              appearance PBRAppearance {
+              }
+              geometry Box {
+                size 0.075 0.00157 0.0127
+              }
+            }
+          ]
+          name "sensor_panel_PCB"
+          boundingObject USE ip_PCB
+          physics Physics {
+            density -1
+            mass 0.005
+          }
+        }
+      ]
+    }
+    DEF MOTOR_DRIVER Solid {
+      translation 0 0.005 0
+      children [
+        DEF driver Shape {
+          appearance Appearance {
+            material Material {
+            }
+          }
+          geometry Box {
+            size 0.065 0.01 0.065
+          }
+        }
+      ]
+      name "solid(4)"
+      boundingObject USE driver
+      physics Physics {
+        density -1
+        mass 0.05
+      }
+    }
+    DEF BATTERY Solid {
+      translation -1.10196e-07 0.01 -0.06
+      rotation 0 1 0 1.5708
+      children [
+        DEF BATTERY Shape {
+          appearance PBRAppearance {
+            baseColor 1 0 0
+          }
+          geometry Box {
+            size 0.034 0.025 0.106
+          }
+        }
+      ]
+      name "solid(4)"
+      boundingObject USE BATTERY
+      physics Physics {
+        density -1
+        mass 0.249
+      }
+    }
+    DEF motor_left Solid {
+      translation 0.033 -0.0225 -0.03654
+      rotation 0 0 1 -1.57
+      children [
+        DEF motor Shape {
+          appearance PBRAppearance {
+            baseColor 0.333333 1 1
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.064
+            radius 0.0125
+            subdivision 18
+          }
+          castShadows FALSE
+        }
+      ]
+      boundingObject USE motor
+      physics DEF motor_physics Physics {
+        density -1
+        mass 0.101
+        centerOfMass [
+          0 0 0
+        ]
+      }
+    }
+    DEF motor_right Solid {
+      translation -0.033 -0.0225 -0.0365
+      rotation 0 0 1 1.57
+      children [
+        USE motor
+      ]
+      name "solid(4)"
+      boundingObject USE motor
+      physics USE motor_physics
+    }
+    DEF Upper_Platform Solid {
+      translation 0 0.052 -0.036
+      children [
+        DEF Power_Supply Solid {
+          translation -0.05301 0.015 0
+          children [
+            DEF power_supply Shape {
+              geometry Box {
+                size 0.048 0.025 0.065
+              }
+            }
+          ]
+          name "solid(1)"
+          boundingObject USE power_supply
+          physics Physics {
+            density -1
+            mass 0.173
+          }
+        }
+        DEF Arduino Solid {
+          translation 0.04847 0.007605 0
+          children [
+            DEF arduino Shape {
+              geometry Box {
+                size 0.05342 0.01021 0.1016
+              }
+            }
+          ]
+          boundingObject USE arduino
+          physics Physics {
+            density -1
+            mass 0.037
+          }
+        }
+        DEF upper_Layer Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.17 0.005 0.115
+          }
+        }
+      ]
+      name "solid(7)"
+      boundingObject USE upper_Layer
+      physics Physics {
+        mass 0.05
+        centerOfMass [
+          0 0 0
+        ]
+      }
+      recognitionColors [
+        1 0 0
+      ]
+    }
+    DEF Spacer_4 Solid {
+      translation 0.08 0.025 0.009
+      children [
+        DEF spacer Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(6)"
+      boundingObject USE spacer
+      physics DEF spacer Physics {
+        density -1
+        mass 0.005
+      }
+    }
+    DEF Spacer_3 Solid {
+      translation -0.08 0.025 0.009
+      children [
+        DEF spacer Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(5)"
+      boundingObject USE spacer
+      physics Physics {
+        density -1
+        mass 0.005
+      }
+    }
+    DEF Spacer_2 Solid {
+      translation -0.08 0.025 -0.08
+      children [
+        DEF spacer Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(4)"
+      boundingObject USE spacer
+      physics Physics {
+        density -1
+        mass 0.005
+      }
+    }
+    DEF Spacer_1 Solid {
+      translation 0.08 0.025 -0.08
+      children [
+        DEF spacer Shape {
+          geometry Cylinder {
+            height 0.05
+            radius 0.004
+          }
+        }
+      ]
+      name "solid(3)"
+      boundingObject USE spacer
+      physics Physics {
+        density -1
+        mass 0.005
+      }
+    }
+    DistanceSensor {
+      translation 0 -0.015 0.0815
+      rotation 0 1 0 -1.57
+      children [
+        DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "front_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics DEF SHARP_IR Physics {
+        density -1
+        mass 0.01
+      }
+      recognitionColors [
+        0 0 0
+      ]
+      type "infra-red"
+    }
+    DistanceSensor {
+      translation 0.0778887 0.005 0.061418
+      children [
+        DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "left_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics DEF SHARP_IR Physics {
+        density -1
+        mass 0.01
+      }
+      lookupTable [
+        0 0 0
+        0.3 1000 0
+      ]
+      type "infra-red"
+    }
+    DistanceSensor {
+      translation -0.0779 0.005 0.061418
+      rotation 0 1 0 3.141592653589793
+      children [
+        DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "right_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics DEF SHARP_IR Physics {
+        density -1
+        mass 0.01
+      }
+      lookupTable [
+        0 0 0
+        0.3 1000 0
+      ]
+      type "infra-red"
+    }
+    DEF CASTER Solid {
+      translation 0 -0.025 0.06
+      children [
+        Solid {
+          translation 0 -0.015 0
+          children [
+            DEF caster_ball Shape {
+              appearance PBRAppearance {
+                roughness 1
+                metalness 0
+              }
+              geometry Sphere {
+                radius 0.01375
+                subdivision 2
+              }
+            }
+          ]
+          name "solid(1)"
+          contactMaterial "CASTER"
+          boundingObject USE caster_ball
+          physics Physics {
+            density -1
+            mass 0.005
+          }
+        }
+        Solid {
+          children [
+            DEF caster_cylinder Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 0
+              }
+              geometry Cylinder {
+                height 0.03
+                radius 0.015
+              }
+            }
+          ]
+          boundingObject USE caster_cylinder
+          physics Physics {
+            density -1
+            mass 0.02
+          }
+        }
+      ]
+      name "solid(2)"
+      contactMaterial "CASTER"
+      physics Physics {
+      }
+    }
+    DEF Servo_block1 Solid {
+      translation 0.03795 0.01 0.05036
+      children [
+        DEF Servo1_box Shape {
+          geometry Box {
+            size 0.03721 0.01816 0.031
+          }
+        }
+      ]
+      name "solid(3)"
+      boundingObject USE Servo1_box
+      physics Physics {
+        density -1
+        mass 0.05
+      }
+    }
+    DEF BOT_LAYER Solid {
+      children [
+        DEF BOT_LAYER Shape {
+          appearance Appearance {
+            material Material {
+              ambientIntensity 1
+              diffuseColor 0 0.819608 0
+              shininess 0.4
+              specularColor 0.396078 0.409804 0.466667
+            }
+          }
+          geometry IndexedFaceSet {
+            coord Coordinate {
+              point [
+                -0.085 -0.01 -0.080353, -0.085 -0.01 -0.075353, -0.085 -0.01 -0.005393, -0.085 -0.01 0.072647, -0.085 0 -0.080353, -0.085 0 -0.075353, -0.085 0 -0.005393, -0.085 0 0.072647, -0.084659 -0.01 -0.082941, -0.084659 -0.01 0.075235, -0.084659 0 -0.082941, -0.084659 0 0.075235, -0.08366 -0.01 -0.085353, -0.08366 -0.01 0.077647, -0.08366 0 -0.085353, -0.08366 0 0.077647, -0.082071 -0.01 -0.087424, -0.082071 -0.01 0.079718, -0.082071 0 -0.087424, -0.082071 0 0.079718, -0.08 -0.01 -0.089013, -0.08 -0.01 0.081307, -0.08 0 -0.089013, -0.08 0 0.081307, -0.077588 -0.01 -0.090012, -0.077588 -0.01 0.082306, -0.077588 0 -0.090012, -0.077588 0 0.082306, -0.075 -0.01 -0.090353, -0.075 -0.01 0.082647, -0.075 0 -0.090353, -0.075 0 0.082647, -0.065 -0.01 -0.075353, -0.065 -0.01 -0.005393, -0.065 0 -0.075353, -0.065 0 -0.005393, 0.065 -0.01 -0.075353, 0.065 -0.01 -0.005393, 0.065 0 -0.075353, 0.065 0 -0.005393, 0.075 -0.01 -0.090353, 0.075 -0.01 0.082647, 0.075 0 -0.090353, 0.075 0 0.082647, 0.077588 -0.01 -0.090012, 0.077588 -0.01 0.082306, 0.077588 0 -0.090012, 0.077588 0 0.082306, 0.08 -0.01 -0.089013, 0.08 -0.01 0.081307, 0.08 0 -0.089013, 0.08 0 0.081307, 0.082071 -0.01 -0.087424, 0.082071 -0.01 0.079718, 0.082071 0 -0.087424, 0.082071 0 0.079718, 0.08366 -0.01 -0.085353, 0.08366 -0.01 0.077647, 0.08366 0 -0.085353, 0.08366 0 0.077647, 0.084659 -0.01 -0.082941, 0.084659 -0.01 0.075235, 0.084659 0 -0.082941, 0.084659 0 0.075235, 0.085 -0.01 -0.080353, 0.085 -0.01 -0.075353, 0.085 -0.01 -0.005393, 0.085 -0.01 0.072647, 0.085 0 -0.080353, 0.085 0 -0.075353, 0.085 0 -0.005393, 0.085 0 0.072647
+              ]
+            }
+            normal Normal {
+              vector [
+                -1 0 0, -0.965926 0 -0.258819, -0.965926 0 0.258819, -0.866025 0 -0.5, -0.866025 0 0.5, -0.707107 0 -0.707107, -0.707107 0 0.707107, -0.5 0 -0.866025, -0.5 0 0.866025, -0.258819 0 -0.965926, -0.258819 0 0.965926, 0 -1 0, 0 0 -1, 0 0 1, 0 1 0, 0.258819 0 -0.965926, 0.258819 0 0.965926, 0.5 0 -0.866025, 0.5 0 0.866025, 0.707107 0 -0.707107, 0.707107 0 0.707107, 0.866025 0 -0.5, 0.866025 0 0.5, 0.965926 0 -0.258819, 0.965926 0 0.258819, 1 0 0
+              ]
+            }
+            coordIndex [
+              71, 70, 39, -1, 47, 51, 71, -1, 38, 34, 39, -1, 39, 34, 35, -1, 51, 55, 71, -1, 71, 55, 59, -1, 71, 59, 63, -1, 47, 71, 43, -1, 43, 71, 39, -1, 43, 39, 31, -1, 31, 39, 35, -1, 31, 35, 6, -1, 46, 42, 38, -1, 38, 42, 30, -1, 38, 30, 34, -1, 34, 30, 26, -1, 69, 68, 38, -1, 38, 68, 62, -1, 38, 62, 58, -1, 58, 54, 38, -1, 38, 54, 50, -1, 38, 50, 46, -1, 26, 22, 34, -1, 34, 22, 18, -1, 34, 18, 14, -1, 14, 10, 34, -1, 34, 10, 4, -1, 34, 4, 5, -1, 6, 7, 31, -1, 31, 7, 11, -1, 31, 11, 15, -1, 15, 19, 31, -1, 31, 19, 23, -1, 31, 23, 27, -1, 2, 33, 3, -1, 3, 33, 29, -1, 32, 36, 33, -1, 33, 36, 37, -1, 33, 37, 29, -1, 37, 66, 29, -1, 29, 66, 67, -1, 29, 67, 41, -1, 41, 67, 61, -1, 41, 61, 57, -1, 21, 17, 13, -1, 57, 53, 41, -1, 41, 53, 49, -1, 41, 49, 45, -1, 29, 25, 3, -1, 3, 25, 21, -1, 3, 21, 9, -1, 9, 21, 13, -1, 24, 28, 32, -1, 32, 28, 40, -1, 32, 40, 36, -1, 36, 40, 44, -1, 1, 0, 32, -1, 32, 0, 8, -1, 32, 8, 12, -1, 12, 16, 32, -1, 32, 16, 20, -1, 32, 20, 24, -1, 44, 48, 36, -1, 36, 48, 52, -1, 36, 52, 56, -1, 56, 60, 36, -1, 36, 60, 64, -1, 36, 64, 65, -1, 29, 41, 31, -1, 31, 41, 43, -1, 37, 36, 39, -1, 39, 36, 38, -1, 69, 38, 65, -1, 65, 38, 36, -1, 68, 69, 64, -1, 64, 69, 65, -1, 40, 28, 42, -1, 42, 28, 30, -1, 0, 1, 4, -1, 4, 1, 5, -1, 34, 5, 32, -1, 32, 5, 1, -1, 35, 34, 33, -1, 33, 34, 32, -1, 7, 3, 9, -1, 7, 9, 11, -1, 11, 9, 13, -1, 11, 13, 15, -1, 15, 13, 17, -1, 15, 17, 19, -1, 19, 17, 21, -1, 19, 21, 23, -1, 23, 21, 25, -1, 23, 25, 27, -1, 27, 25, 29, -1, 27, 29, 31, -1, 43, 41, 45, -1, 43, 45, 47, -1, 47, 45, 49, -1, 47, 49, 51, -1, 51, 49, 53, -1, 51, 53, 55, -1, 55, 53, 57, -1, 55, 57, 59, -1, 59, 57, 61, -1, 59, 61, 63, -1, 63, 61, 67, -1, 63, 67, 71, -1, 68, 64, 60, -1, 68, 60, 62, -1, 62, 60, 56, -1, 62, 56, 58, -1, 58, 56, 52, -1, 58, 52, 54, -1, 54, 52, 48, -1, 54, 48, 50, -1, 50, 48, 44, -1, 50, 44, 46, -1, 46, 44, 40, -1, 46, 40, 42, -1, 30, 28, 24, -1, 30, 24, 26, -1, 26, 24, 20, -1, 26, 20, 22, -1, 22, 20, 16, -1, 22, 16, 18, -1, 18, 16, 12, -1, 18, 12, 14, -1, 14, 12, 8, -1, 14, 8, 10, -1, 10, 8, 0, -1, 10, 0, 4, -1, 2, 3, 6, -1, 6, 3, 7, -1, 33, 2, 35, -1, 35, 2, 6, -1, 66, 37, 70, -1, 70, 37, 39, -1, 67, 66, 71, -1, 71, 66, 70, -1
+            ]
+            normalIndex [
+              14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 14, 14, 14, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 11, 11, 11, -1, 13, 13, 13, -1, 13, 13, 13, -1, 25, 25, 25, -1, 25, 25, 25, -1, 13, 13, 13, -1, 13, 13, 13, -1, 25, 25, 25, -1, 25, 25, 25, -1, 12, 12, 12, -1, 12, 12, 12, -1, 0, 0, 0, -1, 0, 0, 0, -1, 13, 13, 13, -1, 13, 13, 13, -1, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 2, -1, 0, 2, 2, -1, 2, 2, 4, -1, 2, 4, 4, -1, 4, 4, 6, -1, 4, 6, 6, -1, 6, 6, 8, -1, 6, 8, 8, -1, 8, 8, 10, -1, 8, 10, 10, -1, 10, 10, 13, -1, 10, 13, 13, -1, 13, 13, 16, -1, 13, 16, 16, -1, 16, 16, 18, -1, 16, 18, 18, -1, 18, 18, 20, -1, 18, 20, 20, -1, 20, 20, 22, -1, 20, 22, 22, -1, 22, 22, 24, -1, 22, 24, 24, -1, 24, 24, 25, -1, 24, 25, 25, -1, 25, 25, 23, -1, 25, 23, 23, -1, 23, 23, 21, -1, 23, 21, 21, -1, 21, 21, 19, -1, 21, 19, 19, -1, 19, 19, 17, -1, 19, 17, 17, -1, 17, 17, 15, -1, 17, 15, 15, -1, 15, 15, 12, -1, 15, 12, 12, -1, 12, 12, 9, -1, 12, 9, 9, -1, 9, 9, 7, -1, 9, 7, 7, -1, 7, 7, 5, -1, 7, 5, 5, -1, 5, 5, 3, -1, 5, 3, 3, -1, 3, 3, 1, -1, 3, 1, 1, -1, 1, 1, 0, -1, 1, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, -1, 12, 12, 12, -1, 12, 12, 12, -1, 12, 12, 12, -1, 12, 12, 12, -1, 25, 25, 25, -1, 25, 25, 25, -1
+            ]
+          }
+        }
+      ]
+      name "solid(1)"
+      boundingObject USE BOT_LAYER
+      physics Physics {
+        density -1
+        mass 0.25
+      }
+      recognitionColors [
+        0 0 0
+      ]
+    }
+    DEF LEFT HingeJoint {
+      jointParameters HingeJointParameters {
+        position 326.5765823611283
+        anchor 0.0775 -0.0225 -0.0403
+      }
+      device [
+        RotationalMotor {
+          name "left_motor"
+        }
+      ]
+      endPoint DEF WHEEL_LEFT Solid {
+        translation 0.07750000353109074 -0.02251351741371665 -0.04034431453047886
+        rotation 0.07495429051475776 -0.0748953887715628 -0.9943704214598228 4.70753992375704
+        children [
+          DEF WHEEL Shape {
+            geometry Cylinder {
+              height 0.025
+              radius 0.0325
+            }
+          }
+        ]
+        name "left_wheel"
+        boundingObject USE WHEEL
+        physics DEF WHEEL_PH Physics {
+          density -1
+          mass 0.1
+        }
+      }
+    }
+    DEF RIGHT HingeJoint {
+      jointParameters HingeJointParameters {
+        position 308.84382988159416
+        anchor -0.0775 -0.0225 -0.0403
+      }
+      device [
+        RotationalMotor {
+          name "right_motor"
+        }
+      ]
+      endPoint Solid {
+        translation -0.0774999957173925 -0.022506546616055598 -0.04030590108708852
+        rotation 0.4216495204723469 -0.4213134659740307 0.8029362647647627 1.7877581671727893
+        children [
+          USE WHEEL
+        ]
+        name "right_wheel"
+        boundingObject USE WHEEL
+        physics USE WHEEL_PH
+      }
+    }
+    Transform {
+      translation 0.01935 0.0098 0.06377
+      children [
+        DEF Servo1 HingeJoint {
+          jointParameters HingeJointParameters {
+            position 3.651208666806547e-07
+          }
+          device [
+            RotationalMotor {
+              name "Servo1"
+              maxVelocity 0.14
+              maxTorque 0.6492
+            }
+          ]
+          endPoint DEF Servo_block2 Solid {
+            translation -0.018600000663087222 -0.008914236168017583 0.00453602447852535
+            rotation -0.9999999999999996 -1.9491937047591095e-08 2.0715994541111083e-08 1.5707997938342158
+            children [
+              Transform {
+                translation 0 0 0.0155
+                children [
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      position -9.181633841692684e-09
+                      axis 0 0 1
+                    }
+                    device [
+                      RotationalMotor {
+                        name "Servo2"
+                        maxVelocity 0.22
+                        maxTorque 0.507984
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0 0 0.015999999999999993
+                      rotation 0 0 1 0
+                      children [
+                        Transform {
+                          translation 0 0 0.016
+                          children [
+                            Solid {
+                              children [
+                                DEF gripper Shape {
+                                  geometry Box {
+                                    size 0.12 0.02 0.005
+                                  }
+                                }
+                              ]
+                              boundingObject USE gripper
+                              physics Physics {
+                                density -1
+                                mass 0.0375
+                              }
+                            }
+                            SliderJoint {
+                              jointParameters JointParameters {
+                                position -6.035913138987237e-07
+                                axis 1 0 0
+                              }
+                              device [
+                                LinearMotor {
+                                  name "linear1"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation -0.0500006035913139 0 0
+                                children [
+                                  DEF right_tooth Transform {
+                                    translation 0 -2.91896e-07 0.02
+                                    rotation 1 0 0 3.14159
+                                    children [
+                                      Shape {
+                                        appearance Appearance {
+                                          material Material {
+                                            ambientIntensity 1
+                                            diffuseColor 0.792157 0.819608 0.933333
+                                            shininess 0.4
+                                            specularColor 0.396078 0.409804 0.466667
+                                          }
+                                        }
+                                        geometry IndexedFaceSet {
+                                          coord Coordinate {
+                                            point [
+                                              -0.0125 0 0, -0.0125 0 0.02, -0.0125 0.01 0, -0.0125 0.01 0.02, -0.002975 0 0.02, -0.002975 0.01 0.02, -0.002823 0 0.018264, -0.002823 0.01 0.018264, -0.002372 0 0.01658, -0.002372 0.01 0.01658, -0.001635 0 0.015, -0.001635 0.01 0.015, -0.000635 0 0.013572, -0.000635 0.01 0.013572, 0.000597 0 0.01234, 0.000597 0.01 0.01234, 0.002025 0 0.01134, 0.002025 0.01 0.01134, 0.0025 0 -0.04, 0.0025 0.01 -0.04, 0.003605 0 0.010603, 0.003605 0.01 0.010603, 0.005289 0 0.010152, 0.005289 0.01 0.010152, 0.007025 0 0.01, 0.007025 0.01 0.01, 0.0125 0 -0.04, 0.0125 0 0.01, 0.0125 0.01 -0.04, 0.0125 0.01 0.01
+                                            ]
+                                          }
+                                          normal Normal {
+                                            vector [
+                                              -1 0 0
+                                              -0.936329 0 -0.351123
+                                              0 -1 0
+                                              0 0 -1
+                                              0 0 1
+                                              0 1 0
+                                              0.173648 0 0.984808
+                                              0.34202 0 0.939693
+                                              0.5 0 0.866025
+                                              0.642788 0 0.766044
+                                              0.766044 0 0.642788
+                                              0.866025 0 0.5
+                                              0.939693 0 0.34202
+                                              0.984808 0 0.173648
+                                              1 0 0
+                                            ]
+                                          }
+                                          coordIndex [
+                                            19, 28, 18, -1, 18, 28, 26, -1, 2, 19, 0, -1, 0, 19, 18, -1, 3, 2, 1, -1, 1, 2, 0, -1, 5, 3, 4, -1, 4, 3, 1, -1, 5, 4, 7, -1, 7, 4, 6, -1, 7, 6, 9, -1, 9, 6, 8, -1, 9, 8, 11, -1, 11, 8, 10, -1, 11, 10, 13, -1, 13, 10, 12, -1, 13, 12, 15, -1, 15, 12, 14, -1, 15, 14, 17, -1, 17, 14, 16, -1, 17, 16, 21, -1, 21, 16, 20, -1, 21, 20, 23, -1, 23, 20, 22, -1, 23, 22, 25, -1, 25, 22, 24, -1, 29, 25, 27, -1, 27, 25, 24, -1, 28, 29, 26, -1, 26, 29, 27, -1, 3, 5, 7, -1, 29, 28, 25, -1, 25, 28, 19, -1, 25, 19, 23, -1, 2, 11, 13, -1, 13, 15, 2, -1, 2, 15, 17, -1, 2, 17, 19, -1, 19, 17, 21, -1, 19, 21, 23, -1, 3, 7, 2, -1, 2, 7, 9, -1, 2, 9, 11, -1, 26, 27, 18, -1, 18, 27, 24, -1, 0, 14, 12, -1, 24, 22, 18, -1, 18, 22, 20, -1, 18, 20, 0, -1, 0, 20, 16, -1, 0, 16, 14, -1, 12, 10, 0, -1, 0, 10, 8, -1, 0, 8, 1, -1, 1, 8, 6, -1, 1, 6, 4, -1
+                                          ]
+                                          normalIndex [
+                                            3, 3, 3, -1, 3, 3, 3, -1, 1, 1, 1, -1, 1, 1, 1, -1, 0, 0, 0, -1, 0, 0, 0, -1, 4, 4, 4, -1, 4, 4, 4, -1, 14, 14, 13, -1, 13, 14, 13, -1, 13, 13, 12, -1, 12, 13, 12, -1, 12, 12, 11, -1, 11, 12, 11, -1, 11, 11, 10, -1, 10, 11, 10, -1, 10, 10, 9, -1, 9, 10, 9, -1, 9, 9, 8, -1, 8, 9, 8, -1, 8, 8, 7, -1, 7, 8, 7, -1, 7, 7, 6, -1, 6, 7, 6, -1, 6, 6, 4, -1, 4, 6, 4, -1, 4, 4, 4, -1, 4, 4, 4, -1, 14, 14, 14, -1, 14, 14, 14, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                                name "solid(1)"
+                                contactMaterial "gripper_material"
+                                boundingObject USE right_tooth
+                                physics Physics {
+                                  mass 0.01875
+                                }
+                              }
+                            }
+                            SliderJoint {
+                              jointParameters JointParameters {
+                                position 4.589010250613766e-07
+                                axis 1 0 0
+                              }
+                              device [
+                                LinearMotor {
+                                  name "linear2"
+                                }
+                              ]
+                              endPoint Solid {
+                                translation 0.050000458901025065 0 0
+                                children [
+                                  DEF left_tooth Transform {
+                                    translation 0 -0.00999998 0.0199999
+                                    rotation -1.20931e-06 1 -8.57842e-07 -3.1415853071795863
+                                    children [
+                                      Shape {
+                                        appearance Appearance {
+                                          material Material {
+                                            ambientIntensity 1
+                                            diffuseColor 0.792157 0.819608 0.933333
+                                            shininess 0.4
+                                            specularColor 0.396078 0.409804 0.466667
+                                          }
+                                        }
+                                        geometry IndexedFaceSet {
+                                          coord Coordinate {
+                                            point [
+                                              -0.0125 0 0, -0.0125 0 0.02, -0.0125 0.01 0, -0.0125 0.01 0.02, -0.002975 0 0.02, -0.002975 0.01 0.02, -0.002823 0 0.018264, -0.002823 0.01 0.018264, -0.002372 0 0.01658, -0.002372 0.01 0.01658, -0.001635 0 0.015, -0.001635 0.01 0.015, -0.000635 0 0.013572, -0.000635 0.01 0.013572, 0.000597 0 0.01234, 0.000597 0.01 0.01234, 0.002025 0 0.01134, 0.002025 0.01 0.01134, 0.0025 0 -0.04, 0.0025 0.01 -0.04, 0.003605 0 0.010603, 0.003605 0.01 0.010603, 0.005289 0 0.010152, 0.005289 0.01 0.010152, 0.007025 0 0.01, 0.007025 0.01 0.01, 0.0125 0 -0.04, 0.0125 0 0.01, 0.0125 0.01 -0.04, 0.0125 0.01 0.01
+                                            ]
+                                          }
+                                          normal Normal {
+                                            vector [
+                                              -1 0 0
+                                              -0.936329 0 -0.351123
+                                              0 -1 0
+                                              0 0 -1
+                                              0 0 1
+                                              0 1 0
+                                              0.173648 0 0.984808
+                                              0.34202 0 0.939693
+                                              0.5 0 0.866025
+                                              0.642788 0 0.766044
+                                              0.766044 0 0.642788
+                                              0.866025 0 0.5
+                                              0.939693 0 0.34202
+                                              0.984808 0 0.173648
+                                              1 0 0
+                                            ]
+                                          }
+                                          coordIndex [
+                                            19, 28, 18, -1, 18, 28, 26, -1, 2, 19, 0, -1, 0, 19, 18, -1, 3, 2, 1, -1, 1, 2, 0, -1, 5, 3, 4, -1, 4, 3, 1, -1, 5, 4, 7, -1, 7, 4, 6, -1, 7, 6, 9, -1, 9, 6, 8, -1, 9, 8, 11, -1, 11, 8, 10, -1, 11, 10, 13, -1, 13, 10, 12, -1, 13, 12, 15, -1, 15, 12, 14, -1, 15, 14, 17, -1, 17, 14, 16, -1, 17, 16, 21, -1, 21, 16, 20, -1, 21, 20, 23, -1, 23, 20, 22, -1, 23, 22, 25, -1, 25, 22, 24, -1, 29, 25, 27, -1, 27, 25, 24, -1, 28, 29, 26, -1, 26, 29, 27, -1, 3, 5, 7, -1, 29, 28, 25, -1, 25, 28, 19, -1, 25, 19, 23, -1, 2, 11, 13, -1, 13, 15, 2, -1, 2, 15, 17, -1, 2, 17, 19, -1, 19, 17, 21, -1, 19, 21, 23, -1, 3, 7, 2, -1, 2, 7, 9, -1, 2, 9, 11, -1, 26, 27, 18, -1, 18, 27, 24, -1, 0, 14, 12, -1, 24, 22, 18, -1, 18, 22, 20, -1, 18, 20, 0, -1, 0, 20, 16, -1, 0, 16, 14, -1, 12, 10, 0, -1, 0, 10, 8, -1, 0, 8, 1, -1, 1, 8, 6, -1, 1, 6, 4, -1
+                                          ]
+                                          normalIndex [
+                                            3, 3, 3, -1, 3, 3, 3, -1, 1, 1, 1, -1, 1, 1, 1, -1, 0, 0, 0, -1, 0, 0, 0, -1, 4, 4, 4, -1, 4, 4, 4, -1, 14, 14, 13, -1, 13, 14, 13, -1, 13, 13, 12, -1, 12, 13, 12, -1, 12, 12, 11, -1, 11, 12, 11, -1, 11, 11, 10, -1, 10, 11, 10, -1, 10, 10, 9, -1, 9, 10, 9, -1, 9, 9, 8, -1, 8, 9, 8, -1, 8, 8, 7, -1, 7, 8, 7, -1, 7, 7, 6, -1, 6, 7, 6, -1, 6, 6, 4, -1, 4, 6, 4, -1, 4, 4, 4, -1, 4, 4, 4, -1, 14, 14, 14, -1, 14, 14, 14, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 5, 5, 5, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1, 2, 2, 2, -1
+                                          ]
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                                name "solid(2)"
+                                contactMaterial "gripper_material"
+                                boundingObject USE left_tooth
+                                physics Physics {
+                                  mass 0.01875
+                                }
+                              }
+                            }
+                          ]
+                        }
+                        DEF mini_servo Shape {
+                          geometry Box {
+                            size 0.023 0.012 0.032
+                          }
+                        }
+                      ]
+                      boundingObject USE mini_servo
+                      physics Physics {
+                        mass 0.0147
+                      }
+                    }
+                  }
+                ]
+              }
+              DEF Servo2_block Shape {
+                geometry Box {
+                  size 0.03721 0.01816 0.031
+                }
+              }
+            ]
+            name "Servo2_block"
+            boundingObject USE Servo2_block
+            physics Physics {
+              mass 0.048
+            }
+          }
+        }
+      ]
+    }
+  ]
+  boundingObject USE BOT_LAYER
+  physics Physics {
+  }
+  controller "wall_follow"
+}
+DEF box Solid {
+  translation -0.43397790184461904 0.024950950000000006 0.12004261173680646
+  rotation -0.5013558016483269 0.6118179304963052 0.6118179304963054 2.2121293296092817
+  children [
+    DEF box Shape {
+      appearance PBRAppearance {
+        baseColor 0.666667 0.333333 0
+      }
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  contactMaterial "box"
+  boundingObject USE box
+  physics Physics {
+  }
+}
+DEF Light light {
+}

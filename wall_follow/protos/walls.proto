@@ -1,0 +1,26 @@
+PROTO walls[
+]
+
+{
+DEF Arena_walls Solid {
+  rotation 1 0 0 -1.5707953071795862
+  scale 0.01 0.01 0.01
+  children [
+    DEF WALLS Shape {
+      appearance PBRAppearance {
+        baseColor 0.666667 0.333333 0
+        roughness 0.9
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "wall1.stl"
+        ]
+      }
+    }
+  ]
+  name "WALLS"
+  boundingObject USE WALLS
+}
+
+}
