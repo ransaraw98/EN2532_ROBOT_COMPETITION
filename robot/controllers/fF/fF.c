@@ -15,15 +15,17 @@
 #include <webots/motor.h>
 #include <stdio.h>
 #include <webots/inertial_unit.h>
-  // * You may want to add macros here.
+#include <webots/camera.h>
+  ////////////////////////////////////// * MACROS ///////////////////////////////////////////////
 
 #define TIME_STEP 16
+/* Line Follow */
 #define nQTR 8
 #define MAX_GS 880 //840
 #define MIN_GS 300
 #define NEW_GS 1000 
 
-
+////////////////////////////////////// *VARIABLES ///////////////////////////////////////////////
 /* QTR SENSOR ARRAY + LINE FOLLOW INITIALIZATIONS*/
 double qtrValues[8] = { 0,0,0,0,0,0,0,0 };
 double qtrNew[nQTR] = { 0, 0, 0, 0, 0,0,0,0 };
@@ -46,6 +48,15 @@ short hardLeft, hardRight, Tjunc = 0;
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
 WbDeviceTag IMU;
+
+/*Color detection*/
+unsigned char red;
+unsigned char green;
+unsigned char blue;
+
+WbDeviceTag CAM1;
+WbDeviceTag CAM2;
+
 /*
 void readQTR(WbDeviceTag *QTRarray) {
     for (int i = 0; i < 8; i++) {
@@ -60,8 +71,12 @@ void lineFollow(void);
 //void hardLeftf(void);
 
 
-void ReadQTR(WbDeviceTag* QTRa) {
-
+void ReadQTR(WbDeviceTag *QTRa) {
+    /*
+    Read all 7 IR distance sensors and update their values in qtrNew array
+    update error array
+    set hardLeft hardRight flags
+    */
     for (int i = 0; i < nQTR; i++) {
         qtrValues[i] = wb_distance_sensor_get_value(QTRa[i]);
 
@@ -70,7 +85,7 @@ void ReadQTR(WbDeviceTag* QTRa) {
         if (qtrValues[i] > maxGS[i]) maxGS[i] = qtrValues[i];
 
         // linear Interpolation
-        qtrNew[i] = ((float)qtrValues[i] - MIN_GS) / (MAX_GS - MIN_GS) * NEW_GS;
+        qtrNew[i] = ((double)qtrValues[i] - MIN_GS) / (MAX_GS - MIN_GS) * NEW_GS;
 
         // Limited values between 0 and 1000 (NEW_GS)
         if (qtrNew[i] > NEW_GS) qtrNew[i] = NEW_GS;
@@ -103,8 +118,6 @@ void ReadQTR(WbDeviceTag* QTRa) {
  
 
 }
-
-
 
 void hardLeftf(void) {
     const double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
@@ -146,6 +159,39 @@ void lineFollow(void) {
 }
 
 
+unsigned char readColor(WbDeviceTag camera) {
+    /*
+    Returns the color detected as a char 'R','G','B'
+    the color test is performed in the given order
+    assumes the object is ONLY one of the three colors
+    for example white will be detected as R in here.
+
+
+    Input should be an initialized WbDeviceTag device
+
+
+    */
+    unsigned char R = 'R';
+    unsigned char G = 'G';
+    unsigned char B = 'B';
+
+    unsigned char* image = wb_camera_get_image(camera);
+
+    if (wb_camera_image_get_red(image, 8, 4, 4) > 200) {
+        return R;
+    }
+    else if (wb_camera_image_get_green(image, 8, 4, 4) > 200) {
+        return G;
+    }
+    else if (wb_camera_image_get_blue(image, 8, 4, 4) > 200) {
+        return B;
+    }
+
+    else {
+        return 0;
+    }
+}
+
 /*
  * This is the main program.
  * The arguments of the main function can be specified by the
@@ -182,6 +228,15 @@ int main(int argc, char** argv) {
     IMU = wb_robot_get_device("inertial_unit");
     wb_inertial_unit_enable(IMU, TIME_STEP); 
 
+
+    /* Initialize cameras*/
+
+    CAM1 = wb_robot_get_device("camera1");
+    CAM2 = wb_robot_get_device("camera2");
+    wb_camera_enable(CAM1, TIME_STEP);
+    wb_camera_enable(CAM2, TIME_STEP);
+
+
     /* main loop
      * Perform simulation steps of TIME_STEP milliseconds
      * and leave the loop when the simulation is over
@@ -204,14 +259,13 @@ int main(int argc, char** argv) {
         }
         wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
         wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
-        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f\n", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
+        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
         /* Process sensor data here */
        
-        //angle = temp;
-        //printf("angle %f\n", wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]);
-        //printf("a");
+        printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
+        
         /*
-         * Enter here functions to send actuator commands, like:
+        * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);
          */
     };
