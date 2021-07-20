@@ -11,8 +11,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.22305897466414973 -0.8813237723991194 -0.41654903916101327 2.2975837681646563
-  position -0.7946108292522793 2.1423268310243597 -1.2948571548442578
+  orientation -0.027253173790268124 -0.9166937047847477 -0.39866015116433584 3.0563205184456486
+  position 2.2957424984365424 2.6810375917965863 -2.7765133997250477
 }
 TexturedBackground {
 }
@@ -76,8 +76,8 @@ DEF Arena_track Solid {
   name "TRACK"
 }
 Robot {
-  translation 0.19442 0.0548906 -0.13645
-  rotation 0.00023065097392841868 0.9999998869652361 0.00041577595300285806 1.5708
+  translation 2.26442 0.0553297 -0.216441
+  rotation -9.256259476861785e-05 0.9999999434827657 0.00032321298173289514 -3.1415853071795863
   children [
     DEF color_detection Transform {
       children [
@@ -823,6 +823,7 @@ Robot {
       device [
         RotationalMotor {
           name "left_motor"
+          maxVelocity 40
         }
       ]
       endPoint DEF WHEEL_LEFT Solid {
@@ -854,11 +855,12 @@ Robot {
       device [
         RotationalMotor {
           name "right_motor"
+          maxVelocity 40
         }
       ]
       endPoint Solid {
-        translation -0.0775 -0.02249999997380849 -0.04030000002523184
-        rotation 0.6774556601219112 -0.6769163987130592 -0.2878159441763579 3.7024993626131493
+        translation -0.0775 -0.022499999973808492 -0.04030000002523185
+        rotation 0.6774556601219114 -0.6769163987130592 -0.2878159441763568 3.702499362613149
         children [
           USE WHEEL
         ]
