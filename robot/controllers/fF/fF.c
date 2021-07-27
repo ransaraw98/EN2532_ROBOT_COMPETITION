@@ -487,6 +487,7 @@ int main(int argc, char** argv) {
                 line_follow = 0;
                 hardLeftf(1.57);
                 state++;
+                printf("STATE is %d \t LINE_FOLLOW is %d\n", state, line_follow);
                 radius++;
             }
         }
@@ -532,15 +533,17 @@ int main(int argc, char** argv) {
                 }
             }
 
-           /* if (state == 6) {
+           if (state == 6) {
                 
-                while (wb_distance_sensor_get_value(ds[0]) > 70) {
-                    line_follow = 1;
-                    wb_robot_step(TIME_STEP);
+                if (wb_distance_sensor_get_value(ds[0]) < 80) {
+                    printf("APRROACHED BOX at 7cm");
+                    line_follow = 0;
+                    Speeds[0], Speeds[1] = 0, 0;
+                    line_follow = 0;
                 }
-                printf("APRROACHED BOX at 7cm");
+                
             }
-            */
+            
        
         wall_follow();
         ReadQTR2(QTR);
