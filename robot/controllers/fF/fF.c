@@ -36,7 +36,7 @@ double qtrStore[7][5];
 char QTR_names[nQTR][6] = { "qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7" };
 char wheels_names[2][12] = { "right_motor", "left_motor" };
 double error[8] = { 0,0,0,0,0,0,0,0 };
-double weights[8] = { 0,-2,-1.1,-0.5,0,0.5,1.1,2};
+double weights[8] = { 0,-2.2,-1.3,-0.8,0,0.8,1.3,2.2};
 double Kp = 0.1;
 double Kd = 0.04;
 double P = 0;
@@ -335,8 +335,8 @@ int main(int argc, char** argv) {
          */
 
          //readQTR(QTR);
-        ReadQTR(QTR);
-        lineFollow();
+        ReadQTR2(QTR);
+        lineFollow2();
         if (hardLeft == 1) {
             hardLeftf();
         }
