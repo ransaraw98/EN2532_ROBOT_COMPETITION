@@ -538,8 +538,11 @@ int main(int argc, char** argv) {
                 if (wb_distance_sensor_get_value(ds[0]) < 80) {
                     printf("APRROACHED BOX at 7cm");
                     line_follow = 0;
-                    Speeds[0], Speeds[1] = 0, 0;
                     line_follow = 0;
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], 0);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], 0);
                 }
                 
             }
