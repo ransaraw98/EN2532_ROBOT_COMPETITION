@@ -48,6 +48,7 @@ double PID = 0;
 short junc = -1;
 unsigned short int state = 0;
 char ds_names[3][10] = {"front_ir","left_ir","right_ir"};
+unsigned short radius = 0;
 
 int line_follow = 0;
 int wall_flag = 0;
@@ -258,7 +259,7 @@ void lineFollow(void) {
     pEr = eSUM;
 }
 
-void lineFollow2(void) {
+void lineFollow2(double coeff) {
     if(line_follow == 1){ 
         double eSUM2 = 0;
         for (int i = 0; i < 7; i++) { //neglect the leftmost sensor
@@ -267,8 +268,8 @@ void lineFollow2(void) {
         P = Kp * eSUM2;
         D = Kd * (eSUM2 - pEr);
         PID = P + D;
-        Speeds[0] = baseSpeed + PID;
-        Speeds[1] = baseSpeed - PID;
+        Speeds[0] = baseSpeed/coeff + PID;
+        Speeds[1] = baseSpeed/coeff - PID;
         pEr = eSUM2;
         printf("%f\n", PID);
     
@@ -486,24 +487,64 @@ int main(int argc, char** argv) {
                 line_follow = 0;
                 hardLeftf(1.57);
                 state++;
+                radius++;
             }
         }
             if (state == 5) {
-                if (wb_distance_sensor_get_value(ds[0])) {
+                /*for (int i = 0; i < 100; i++) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], -1);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], -1);
+                    wb_robot_step(TIME_STEP);
+                }
+                */
+                Speeds[0] = baseSpeed;
+                Speeds[1] = baseSpeed;
+
+                for (int i = 0; i < 130; i++) {
+                    ReadQTR2(QTR);
+                    lineFollow2(2);
+                    wb_robot_step(TIME_STEP);
+                    printf("calibration line follow\n");
+                }
+
+                double temp = wb_distance_sensor_get_value(ds[0]);
+                printf("DISTANCE aftr LEFT TURN IS %f\n", temp);
+                if (wb_distance_sensor_get_value(ds[0])<1500) {
                     printf("**************BOX_DETECTED*************");
+                    state++;
                     line_follow = 1;
                 }
                 else {
                     state--;
-                    hardRightf(-1.45);
+                    printf("BACKING");
+                    /*for (int i = 0; i < 130; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], -1);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], -1);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    */
+                    hardRightf(-1.25);
                     line_follow = 1;
                 }
             }
-            
+
+           /* if (state == 6) {
+                
+                while (wb_distance_sensor_get_value(ds[0]) > 70) {
+                    line_follow = 1;
+                    wb_robot_step(TIME_STEP);
+                }
+                printf("APRROACHED BOX at 7cm");
+            }
+            */
        
         wall_follow();
         ReadQTR2(QTR);
-        lineFollow2();
+        lineFollow2(1);
 
        
         //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);

@@ -7,6 +7,7 @@ WorldInfo {
   contactProperties [
     ContactProperties {
       material1 "box"
+      material2 "teeth"
     }
     ContactProperties {
       material1 "CASTER"
@@ -17,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.9916175176095894 -0.12917822766592751 -0.002772051025082637 0.5259608622605493
-  position 0.0921494122564725 0.5670127311054193 0.7596938711923533
+  orientation 0.19154485729421822 0.8740151463362064 0.44655133144918235 3.823536240047293
+  position 0.5771643862149154 2.636448202673685 -3.608905401517337
 }
 TexturedBackground {
 }
@@ -34,8 +35,8 @@ Floor {
   }
 }
 DEF CUBE Solid {
-  translation 1.69846 0.03 -1.71604
-  rotation 0 1 0 0.785398
+  translation 1.77532 0.03 -2.15065
+  rotation 0 1 0 2.35619
   children [
     DEF Cube_faces Group {
       children [
@@ -248,8 +249,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.01859999127328993 -0.008929184121653739 0.0045359203441008656
-            rotation -0.3112861584190712 -0.002362429706467612 0.9503132886067516 3.345302391148161e-07
+            translation -0.018599991273289998 -0.008929184121653791 0.004535920344100874
+            rotation -3.951469999999933e-10 5.2073599999999946e-08 0.9999999999999987 3.14159
             children [
               Transform {
                 translation 0 0 0.0155
@@ -265,7 +266,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 5.530499587186328e-10 -1.8366655239050502e-06 0.015999957062561833
+                      translation 5.530499587186262e-10 -1.836665523905052e-06 0.015999957062561895
                       rotation 0 0 0.9999999999999999 3.12000002824674
                       children [
                         Transform {
@@ -349,6 +350,7 @@ Robot {
                                   }
                                 ]
                                 name "solid(1)"
+                                contactMaterial "teeth"
                                 boundingObject USE Right_tooth
                                 physics Physics {
                                   density -1
@@ -420,6 +422,7 @@ Robot {
                                   }
                                 ]
                                 name "solid(2)"
+                                contactMaterial "teeth"
                                 boundingObject USE Left_tooth
                                 physics Physics {
                                   density -1
