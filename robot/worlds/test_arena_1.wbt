@@ -17,8 +17,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.9926513074923765 -0.08956920796920166 -0.08136792191917636 5.026075898533385
-  position 1.7202315066369267 2.7179052638640684 0.5821414887708438
+  orientation 0.009999903024263885 0.9044665536334292 0.4264273153750502 3.14667585562754
+  position 1.6552290852519462 2.4847187975522838 -3.9680318410670017
 }
 TexturedBackground {
 }
@@ -31,6 +31,137 @@ Floor {
   appearance Parquetry {
     type "dark strip"
     colorOverride 0 0 0
+  }
+}
+DEF CUBE Solid {
+  translation 1.69846 0.03 -1.71604
+  rotation 0 1 0 0.785398
+  children [
+    DEF Cube_faces Group {
+      children [
+        DEF Blue_1 Transform {
+          translation -0.025 0.025 0.025
+          rotation 1 0 0 3.14159
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Green_1 Transform {
+          translation 0.025 0.025 -0.025
+          rotation -0.5773509358554485 0.5773489358556708 0.5773509358554485 -2.094395307179586
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 1 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Green_2 Transform {
+          translation -0.025 -0.025 -0.025
+          rotation 0.5773509358554485 0.5773489358556708 0.5773509358554485 2.0944
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 1 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Red_2 Transform {
+          translation -0.025 -0.025 0.025
+          rotation 1 0 0 -1.5707953071795862
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Red_1 Transform {
+          translation -0.025 0.025 -0.025
+          rotation 1 0 0 1.5708
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 1 0 0
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+        DEF Blue_2 Transform {
+          translation -0.025 -0.025 -0.025
+          scale 0.5 0.5 0.5
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0 0 1
+                roughness 0.9
+                metalness 0
+              }
+              geometry Mesh {
+                url [
+                  "box_side.STL"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  name "solid(1)"
+  boundingObject Box {
+    size 0.05 0.05 0.05
+  }
+  physics Physics {
+    density -1
+    mass 0.1
   }
 }
 Solid {
@@ -101,9 +232,66 @@ DEF Arena_track Solid {
   name "TRACK"
 }
 Robot {
-  translation 1.82244 0.0553678 -0.122918
+  translation 0.11244 0.0550505 -0.122916
   rotation 0.00023064997392877674 0.9999998869662985 0.00041577395300352584 1.5708
   children [
+    DistanceSensor {
+      translation -0.0779 0.005 0.061418
+      rotation 0 1 0 3.141592653589793
+      children [
+        DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "right_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics DEF SHARP_IR Physics {
+        density -1
+        mass 0.01
+      }
+      lookupTable [
+        0 0 0
+        0.3 1000 0
+      ]
+      type "infra-red"
+    }
+    DistanceSensor {
+      translation 0.0778887 0.005 0.061418
+      children [
+        DEF IR Shape {
+          appearance PBRAppearance {
+            baseColor 0 0 0
+          }
+          geometry Box {
+            size 0.01 0.01 0.025
+          }
+        }
+      ]
+      name "left_ir"
+      boundingObject DEF IR Shape {
+        geometry Box {
+          size 0.01 0.01 0.025
+        }
+      }
+      physics DEF SHARP_IR Physics {
+        density -1
+        mass 0.01
+      }
+      lookupTable [
+        0 0 0
+        0.3 1000 0
+      ]
+      type "infra-red"
+    }
     DEF Servo_block1 Solid {
       translation 0.03795 0.01 0.05036
       children [
@@ -128,8 +316,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.01859999127328974 -0.008902834277876644 0.004587422399025697
-            rotation -0.9999999984777557 2.219365689570416e-08 5.5176880785131436e-05 0.0057764462978122585
+            translation -0.018599991273289207 -0.008902834277876292 0.004587422399025533
+            rotation -0.9999999984777558 2.2193656149916298e-08 5.517687893098679e-05 0.0057764462978122585
             children [
               Transform {
                 translation 0 0 0.0155
@@ -145,8 +333,8 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation -4.020817837903571e-08 1.8362254368560096e-06 0.015999957062561604
-                      rotation -0.31013058528374593 -0.006791122998715404 -0.950669711687491 7.300048299977715e-08
+                      translation -4.0208178379035176e-08 1.8362254368559753e-06 0.015999957062561042
+                      rotation -0.3072289503177351 -0.006727584086764566 -0.9516118492846851 7.300048299977715e-08
                       children [
                         Transform {
                           translation 0 0 0.016
@@ -967,6 +1155,10 @@ Robot {
         density -1
         mass 0.01
       }
+      lookupTable [
+        0 0 0
+        1.5 1500 0
+      ]
     }
     DEF CASTER Solid {
       translation 0 -0.025 0.06

@@ -1,0 +1,15 @@
+Dear students, 
+
+Please find the attachments to add the colored cube to your Webots project. 
+
+1) Add the file “box_side.stl” to the directory “your_project_folder\worlds”
+
+2) Open Webots project and pause your simulations. 
+
+3) Click “add a new object or import an object (ctrl+shift+A)” button, then click “Import” and select the attachment “cube_export.wbo”
+
+4) Once you have successfully imported, the colored cube will appear at your origin. Drag and drop it to the suitable position. 
+
+Note: While you are completing your robot design, always add the CAD design files, Image files, Texture files, etc. inside the directory “your_project_folder\worlds”. This allows you to utilize those files without specifying the full path. 
+
+Eg: You can simply mention “chassis_design.stl” as the “url” for a “geometry Mesh” instead of typing the full path “C:\EN2532\worlds\chassis_design.stl”.

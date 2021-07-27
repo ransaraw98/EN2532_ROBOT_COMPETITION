@@ -45,11 +45,17 @@ double pEr = 0;
 double baseSpeed = 400;  //  rad/s
 double Speeds[2] = { 0,0 };
 double PID = 0;
-short hardLeft, hardRight, Tjunc = 0;
+short junc = -1;
+unsigned short int state = 0;
+char ds_names[3][10] = {"front_ir","left_ir","right_ir"};
 
+int line_follow = 0;
+int wall_flag = 0;
+int state4 = 0;
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
 WbDeviceTag IMU;
+WbDeviceTag ds[3];
 
 /*Color detection*/
 unsigned char red;
@@ -134,8 +140,8 @@ void ReadQTR(WbDeviceTag *QTRa) {
         
         //error[i] = qtrNew[i] - 70;
     }
-    
-     if ((error[1] == 0) && (error[2] == 0) && (error[3] == 0) && (error[4] == 0) && (error[5] == 0) && (error[6] == 1000) && (error[7] == 1000))  {
+    /*
+    if ((error[1] == 0) && (error[2] == 0) && (error[3] == 0) && (error[4] == 0) && (error[5] == 0) && (error[6] == 1000) && (error[7] == 1000))  {
 
           hardLeft = 1;
           printf("hardleft");
@@ -152,7 +158,7 @@ void ReadQTR(WbDeviceTag *QTRa) {
           hardRight = 0;
       }
  
-
+ */
 }
 
 
@@ -181,37 +187,59 @@ void ReadQTR2(WbDeviceTag QTRa[]) {
         error[i] = qtrStore[i][3]-250;
    
     }
-    if ((error[0] < 350) && (error[1] < 350) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] > 400) && (error[6] > 400)) {
 
-        hardLeft = 1;
-        printf("hardleft");
-    }
-    else {
-        hardLeft = 0;
-    }
 
 }
-void hardLeftf(void) {
+
+short j_check(void) {
+    
+    ReadQTR2(QTR);
+    if ((error[0] < 350) && (error[1] < 350) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] > 400) && (error[6] > 400)) {
+        printf("hardleft");
+        return 1;
+        
+    }
+    
+    if ((error[0] > 400) && (error[1] > 400) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] < 350) && (error[6] < 350)) {
+
+        printf("right junction found");
+        return 2;
+    }
+    unsigned int flag = 1;
+    for (int i = 0; i < 7; i++) {
+        flag = flag && (error[i] < 100);
+    if(flag) {
+        return 3;
+    }
+    
+    }
+    printf("NO JUNCT");
+    return -1;
+}
+void hardLeftf(double angle) {
     const double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
     printf("HARDLEFT\n");
-    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle< 1.57) {
+    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle< angle) {
         wb_motor_set_velocity(wheels[0], 3);
         wb_motor_set_velocity(wheels[1], -0.25);
         wb_robot_step(TIME_STEP);
     }
-    hardLeft = 0;
- 
+    junc = -1;
+    wb_motor_set_velocity(wheels[0], 0);
+    wb_motor_set_velocity(wheels[1], 0);
 }
-void hardRightf(void) {
+void hardRightf(double angle) {
     const double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
     printf("HARDRIGHT\n");
-    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle > -1.57) {
+    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle > angle) {
         wb_motor_set_velocity(wheels[0], 0);
         wb_motor_set_velocity(wheels[1], 3);
         wb_robot_step(TIME_STEP);
     }
-    hardLeft = 0;
-
+    junc = -1;
+    printf("junc = %d", junc);
+    wb_motor_set_velocity(wheels[0], 0);
+    wb_motor_set_velocity(wheels[1], 0);
 }
 
 
@@ -231,18 +259,24 @@ void lineFollow(void) {
 }
 
 void lineFollow2(void) {
-    double eSUM2 = 0;
-    for (int i = 0; i < 7; i++) { //neglect the leftmost sensor
-        eSUM2 += error[i] * weights[i+1];
+    if(line_follow == 1){ 
+        double eSUM2 = 0;
+        for (int i = 0; i < 7; i++) { //neglect the leftmost sensor
+            eSUM2 += error[i] * weights[i + 1];
+        }
+        P = Kp * eSUM2;
+        D = Kd * (eSUM2 - pEr);
+        PID = P + D;
+        Speeds[0] = baseSpeed + PID;
+        Speeds[1] = baseSpeed - PID;
+        pEr = eSUM2;
+        printf("%f\n", PID);
+    
+        wb_motor_set_position(wheels[0], INFINITY);
+        wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+        wb_motor_set_position(wheels[1], INFINITY);
+        wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
     }
-    P = Kp * eSUM2;
-    D = Kd * (eSUM2 - pEr);
-    PID = P + D;
-    Speeds[0] = baseSpeed + PID;
-    Speeds[1] = baseSpeed - PID;
-    pEr = eSUM2;
-    printf("%f\n",PID);
-
 }
 
 unsigned char readColor(WbDeviceTag camera) {
@@ -277,6 +311,61 @@ unsigned char readColor(WbDeviceTag camera) {
         return 0;
     }
 }
+
+/* wall follow */
+
+void wall_follow(void) {
+
+    if (wall_flag == 1) {
+        
+        double leftSpeed = 1.0;
+        double rightSpeed = 1.0;
+        double vall = wb_distance_sensor_get_value(ds[1]);
+        double valr = wb_distance_sensor_get_value(ds[2]);
+        printf("vall %f\n", vall);
+        printf("valr %f\n", valr);
+      
+            printf("inside while\n");
+            if (valr < 1000) {
+                if (valr > 690) {
+                    leftSpeed = 1.0;
+                    rightSpeed = -1.0;
+                }
+                else if (valr < 570) {
+                    leftSpeed = -1.0;
+                    rightSpeed = 1.0;
+                }
+            }
+
+            else if (vall < 1000) {
+
+                if (vall > 690) {
+                    leftSpeed = -1.0;
+                    rightSpeed = 1.0;
+                }
+                else if (vall < 570) {
+                    leftSpeed = 1.0;
+                    rightSpeed = -1.0;
+                }
+                
+            }
+            wb_motor_set_position(wheels[0], INFINITY);
+            wb_motor_set_velocity(wheels[0], rightSpeed);
+            wb_motor_set_position(wheels[1], INFINITY);
+            wb_motor_set_velocity(wheels[1], leftSpeed);
+
+            vall = wb_distance_sensor_get_value(ds[1]);
+            valr = wb_distance_sensor_get_value(ds[2]);
+            printf("vall %f\n", vall);
+            printf("valr %f\n", valr);
+            wb_robot_step(TIME_STEP);
+     
+    
+    }
+   
+    
+}
+
 
 /*
  * This is the main program.
@@ -322,6 +411,14 @@ int main(int argc, char** argv) {
     wb_camera_enable(CAM1, TIME_STEP);
     wb_camera_enable(CAM2, TIME_STEP);
 
+    /*Initialize distance sensors*/
+
+    for (int i = 0; i < 3;i++   ) {
+                                            
+        ds[i] = wb_robot_get_device(ds_names[i]);
+        wb_distance_sensor_enable(ds[i], TIME_STEP);
+        printf("Initialized ds %d\n",i);
+    }
 
     /* main loop
      * Perform simulation steps of TIME_STEP milliseconds
@@ -335,24 +432,87 @@ int main(int argc, char** argv) {
          */
 
          //readQTR(QTR);
+        junc = j_check();
+        printf("junc is %d\n", junc);
+        if (state == 0) {
+            if (junc == 3) {
+                   line_follow = 1;
+                   state++;
+                }
+            }
+        
+
+        if ((state == 1) && (wb_distance_sensor_get_value(ds[2]) < 1000)) {
+            int i = 0;
+            while (i < 5) {
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+                wb_robot_step(TIME_STEP);
+                i++;
+            }
+            line_follow = 0;
+            wall_flag = 1;
+            state++;
+        }
+        if ((state == 2) && (wb_distance_sensor_get_value(ds[2]) >= 1000) && (wb_distance_sensor_get_value(ds[1]) >= 1000)) {
+            line_follow = 1;
+            wall_flag = 0;
+            state++;
+        }
+        if ((state == 1)|| (state ==3)){
+            
+            if (junc == 1) {
+                hardLeftf(1.57);
+            }
+            if (junc == 2) {
+                hardRightf(-1.57);
+                junc = -1;
+            }
+
+        }
+        
+        if ((state == 3)&& (junc ==3)) {
+
+            hardRightf(-1.4);
+            line_follow = 1;
+            state++;
+
+        }
+        if (state == 4) {
+
+            if (junc == 1) {
+                line_follow = 0;
+                hardLeftf(1.57);
+                state++;
+            }
+        }
+            if (state == 5) {
+                if (wb_distance_sensor_get_value(ds[0])) {
+                    printf("**************BOX_DETECTED*************");
+                    line_follow = 1;
+                }
+                else {
+                    state--;
+                    hardRightf(-1.45);
+                    line_follow = 1;
+                }
+            }
+            
+       
+        wall_follow();
         ReadQTR2(QTR);
         lineFollow2();
-        if (hardLeft == 1) {
-            hardLeftf();
-        }
-        if (hardRight == 1) {
-            hardRightf();
-        }
-        wb_motor_set_position(wheels[0], INFINITY);
-        wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
-        wb_motor_set_position(wheels[1], INFINITY);
-        wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+
+       
         //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
-        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6], error[7]);
+        //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6], error[7]);
         /* Process sensor data here */
        
-        printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
-        
+       // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
+        printf("STATE is %d \t LINE_FOLLOW is %d\n", state, line_follow);
+        printf("\t \t \t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
         /*
         * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);
