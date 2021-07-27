@@ -1,7 +1,13 @@
 #VRML_SIM R2021a utf8
 WorldInfo {
+  info [
+    ""
+  ]
   coordinateSystem "NUE"
   contactProperties [
+    ContactProperties {
+      material1 "box"
+    }
     ContactProperties {
       material1 "CASTER"
       coulombFriction [
@@ -11,8 +17,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.13779068436632916 -0.896899388472828 -0.42022043531809106 2.6072213488509686
-  position 1.8829076621919814 1.1228839552455914 -1.0332203009513723
+  orientation 0.6135971169927221 -0.7793920102795903 -0.1266754606486936 5.976189601875788
+  position 0.3614520479126506 0.4428287993617526 1.0000998174143239
 }
 TexturedBackground {
 }
@@ -25,6 +31,25 @@ Floor {
   appearance Parquetry {
     type "dark strip"
     colorOverride 0 0 0
+  }
+}
+Solid {
+  translation 1.98791 0.03 -0.369292
+  children [
+    DEF box Shape {
+      geometry Box {
+        size 0.05 0.05 0.05
+      }
+    }
+  ]
+  contactMaterial "box"
+  boundingObject USE box
+  physics Physics {
+    density -1
+    mass 0.005
+    centerOfMass [
+      0 0 0
+    ]
   }
 }
 DEF Light SpotLight {
@@ -76,8 +101,8 @@ DEF Arena_track Solid {
   name "TRACK"
 }
 Robot {
-  translation 2.26442 0.0553297 -0.216441
-  rotation -9.256259476861785e-05 0.9999999434827657 0.00032321298173289514 -3.1415853071795863
+  translation 0.20244 0.0550673 -0.122916
+  rotation 0.00023064997392877674 0.9999998869662985 0.00041577395300352584 1.5708
   children [
     DEF Servo_block1 Solid {
       translation 0.03795 0.01 0.05036
@@ -103,8 +128,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018599991273289943 -0.008902834277876779 0.00458742239902576
-            rotation -0.9999999984777557 2.2193656154479003e-08 5.517687894233099e-05 0.0057764462978122585
+            translation -0.018599991273289845 -0.008902834277876706 0.004587422399025735
+            rotation -0.9999999984777558 2.2193656149916298e-08 5.517687893098679e-05 0.0057764462978122585
             children [
               Transform {
                 translation 0 0 0.0155
@@ -120,8 +145,8 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation -4.020817837903591e-08 1.8362254368560225e-06 0.015999957062561826
-                      rotation -0.3081367526532477 -0.006747462801124255 -0.9513181452122411 7.300048299977715e-08
+                      translation -4.0208178379035805e-08 1.8362254368560158e-06 0.015999957062561715
+                      rotation -0.3072356246113185 -0.006727730237937229 -0.9516096934224337 7.300048299977715e-08
                       children [
                         Transform {
                           translation 0 0 0.016
@@ -1091,5 +1116,5 @@ Robot {
   boundingObject USE BOT_LAYER
   physics Physics {
   }
-  controller "ransika"
+  controller "fF"
 }

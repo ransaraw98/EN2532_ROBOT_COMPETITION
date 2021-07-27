@@ -36,13 +36,13 @@ double qtrStore[7][5];
 char QTR_names[nQTR][6] = { "qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7" };
 char wheels_names[2][12] = { "right_motor", "left_motor" };
 double error[8] = { 0,0,0,0,0,0,0,0 };
-double weights[8] = { 0,5,1.3,1,0,-1,-1.3,-5};
-double Kp = 0.45;
-double Kd = 0.1;
+double weights[8] = { 0,-2,-1.1,-0.5,0,0.5,1.1,2};
+double Kp = 0.1;
+double Kd = 0.04;
 double P = 0;
 double D = 0;
 double pEr = 0;
-double baseSpeed = 200;  //  rad/s
+double baseSpeed = 400;  //  rad/s
 double Speeds[2] = { 0,0 };
 double PID = 0;
 short hardLeft, hardRight, Tjunc = 0;
@@ -125,14 +125,14 @@ void ReadQTR(WbDeviceTag *QTRa) {
         if (qtrNew[i] > NEW_GS) qtrNew[i] = NEW_GS;
         if (qtrNew[i] < 0) qtrNew[i] = 0;
 
-        /*if (qtrNew[i] < 70) {
+        if (qtrNew[i] < 70) {
             error[i] = 0;
         }
         else {
             error[i] = 1000;//qtrNew[i] - 70;
         }
-        */
-        error[i] = qtrNew[i] - 70;
+        
+        //error[i] = qtrNew[i] - 70;
     }
     
      if ((error[1] == 0) && (error[2] == 0) && (error[3] == 0) && (error[4] == 0) && (error[5] == 0) && (error[6] == 1000) && (error[7] == 1000))  {
@@ -221,12 +221,12 @@ void lineFollow(void) {
     for (int i = 1; i < 8; i++) { //neglect the leftmost sensor
         eSUM += error[i] * weights[i];
     }
-
+    printf("Total error %f", eSUM);
     P = Kp * eSUM;
     D = Kd * (eSUM - pEr);
     PID = P + D;
-    Speeds[0] = baseSpeed - PID;
-    Speeds[1] = baseSpeed + PID;
+    Speeds[0] = baseSpeed + PID;
+    Speeds[1] = baseSpeed - PID;
     pEr = eSUM;
 }
 
@@ -238,8 +238,8 @@ void lineFollow2(void) {
     P = Kp * eSUM2;
     D = Kd * (eSUM2 - pEr);
     PID = P + D;
-    Speeds[0] = baseSpeed - PID;
-    Speeds[1] = baseSpeed + PID;
+    Speeds[0] = baseSpeed + PID;
+    Speeds[1] = baseSpeed - PID;
     pEr = eSUM2;
     printf("%f\n",PID);
 
@@ -335,8 +335,8 @@ int main(int argc, char** argv) {
          */
 
          //readQTR(QTR);
-        ReadQTR2(QTR);
-        lineFollow2();
+        ReadQTR(QTR);
+        lineFollow();
         if (hardLeft == 1) {
             hardLeftf();
         }
