@@ -16,6 +16,8 @@
 #include <stdio.h>
 #include <webots/inertial_unit.h>
 #include <webots/camera.h>
+#include <webots/camera.h>
+#include <stdlib.h>
   ////////////////////////////////////// * MACROS ///////////////////////////////////////////////
 
 #define TIME_STEP 16
@@ -36,8 +38,8 @@ double qtrStore[7][5];
 char QTR_names[nQTR][6] = { "qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7" };
 char wheels_names[2][12] = { "right_motor", "left_motor" };
 double error[8] = { 0,0,0,0,0,0,0,0 };
-double weights[8] = { 0,-2.2,-1.3,-0.8,0,0.8,1.3,2.2};
-double Kp = 0.1;
+double weights[8] = { 0,-2.2,-1.5,-1,0,1,1.5,2.2};
+double Kp = 0.15;
 double Kd = 0.04;
 double P = 0;
 double D = 0;
@@ -196,7 +198,7 @@ short j_check(void) {
     
     ReadQTR2(QTR);
     if ((error[0] < 350) && (error[1] < 350) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] > 400) && (error[6] > 400)) {
-        printf("hardleft");
+        printf("left junction found");
         return 1;
         
     }
@@ -206,41 +208,115 @@ short j_check(void) {
         printf("right junction found");
         return 2;
     }
-    unsigned int flag = 1;
+   /* unsigned int flag = 1;
     for (int i = 0; i < 7; i++) {
         flag = flag && (error[i] < 100);
     if(flag) {
         return 3;
     }
-    
     }
+    */
+    if ((error[0] < 100) && (error[1] < 100) && (error[2] < 100) && (error[3] < 100) && (error[4] < 100) && (error[5] < 100) && (error[6] < 100)) {
+
+        printf("T junction found");
+        return 3;
+    }
+    
+    
     printf("NO JUNCT");
     return -1;
 }
 void hardLeftf(double angle) {
-    const double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+    double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+    double readAngle = initAngle;
+    double prevAngle = initAngle;
+    double finalAngle = initAngle + angle;
+    unsigned int Tflag = 0;
+    //double delta = abs(finalAngle * 0.05);
     printf("HARDLEFT\n");
-    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle< angle) {
+    printf("InitAngle = %f\n",initAngle);
+    while (readAngle - initAngle < angle) {
+        wb_motor_set_velocity(wheels[0], 2.5);
+        wb_motor_set_velocity(wheels[1], -0.5);
+        readAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+        printf("read RAW = %f\t", readAngle);
+        if (abs(prevAngle - readAngle) > 5) {
+            Tflag = 1;
+        }
+        if (Tflag == 1) {
+            if (initAngle < 0) {
+                readAngle -= 6.28;
+            }
+            if (initAngle >= 0) {
+                readAngle += 6.28;
+            }
+        }
+        printf("read Modified = %f\n", readAngle);
+        prevAngle = readAngle;
+        wb_robot_step(TIME_STEP);
+    }
+    /*while (1) {
+        readAngle  = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
         wb_motor_set_velocity(wheels[0], 3);
         wb_motor_set_velocity(wheels[1], -0.25);
+        if ((readAngle < finalAngle + delta) && (readAngle > finalAngle - delta)) { 
+            break;
+        }
+        wb_robot_step(TIME_STEP);
+    }*/
+    junc = -1;
+    for (int i = 0; i < 50; i++) {
+        wb_motor_set_velocity(wheels[0], 0);
+        wb_motor_set_velocity(wheels[1], 0);
         wb_robot_step(TIME_STEP);
     }
-    junc = -1;
-    wb_motor_set_velocity(wheels[0], 0);
-    wb_motor_set_velocity(wheels[1], 0);
+    
 }
 void hardRightf(double angle) {
-    const double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+    double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+    double readAngle = initAngle;
+    double prevAngle = initAngle;
+    double finalAngle = initAngle + angle;
+    unsigned int Tflag = 0;
+    //double delta = abs(finalAngle * 0.05);
     printf("HARDRIGHT\n");
-    while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[2]-initAngle > angle) {
-        wb_motor_set_velocity(wheels[0], 0);
-        wb_motor_set_velocity(wheels[1], 3);
+    printf("InitAngle = %f\n", initAngle);
+    while (readAngle - initAngle > angle) {
+        wb_motor_set_velocity(wheels[0], -0.5);
+        wb_motor_set_velocity(wheels[1], 2.5);
+        readAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+        printf("read RAW = %f\t", readAngle);
+        if (abs(prevAngle - readAngle) > 5) {
+            Tflag = 1;
+        }
+        if (Tflag == 1) {
+            if (initAngle < 0) {
+                readAngle -= 6.28;
+            }
+            if (initAngle >= 0) {
+                readAngle += 6.28;
+            }
+        }
+        printf("read Modified = %f\n", readAngle);
+        prevAngle = readAngle;
         wb_robot_step(TIME_STEP);
     }
+    /*while (1) {
+        readAngle  = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
+        wb_motor_set_velocity(wheels[0], 3);
+        wb_motor_set_velocity(wheels[1], -0.25);
+        if ((readAngle < finalAngle + delta) && (readAngle > finalAngle - delta)) {
+            break;
+        }
+        wb_robot_step(TIME_STEP);
+    }*/
     junc = -1;
-    printf("junc = %d", junc);
-    wb_motor_set_velocity(wheels[0], 0);
-    wb_motor_set_velocity(wheels[1], 0);
+    for (int i = 0; i < 50; i++) {
+        wb_motor_set_velocity(wheels[0], 0);
+        wb_motor_set_velocity(wheels[1], 0);
+        wb_robot_step(TIME_STEP);
+    }
+
 }
 
 
@@ -465,10 +541,10 @@ int main(int argc, char** argv) {
         if ((state == 1)|| (state ==3)){
             
             if (junc == 1) {
-                hardLeftf(1.57);
+                hardLeftf(1.25);
             }
             if (junc == 2) {
-                hardRightf(-1.57);
+                hardRightf(-1.47);
                 junc = -1;
             }
 
@@ -476,8 +552,9 @@ int main(int argc, char** argv) {
         
         if ((state == 3)&& (junc ==3)) {
 
-            hardRightf(-1.4);
+            hardRightf(-1.3);
             line_follow = 1;
+            Kp = 0.1;
             state++;
 
         }
@@ -512,7 +589,7 @@ int main(int argc, char** argv) {
 
                 double temp = wb_distance_sensor_get_value(ds[0]);
                 printf("DISTANCE aftr LEFT TURN IS %f\n", temp);
-                if (wb_distance_sensor_get_value(ds[0])<1500) {
+                if (wb_distance_sensor_get_value(ds[0])<750) {
                     printf("**************BOX_DETECTED*************");
                     state++;
                     line_follow = 1;
@@ -520,14 +597,14 @@ int main(int argc, char** argv) {
                 else {
                     state--;
                     printf("BACKING");
-                    /*for (int i = 0; i < 130; i++) {
+                    for (int i = 0; i < 130; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], -1);
                         wb_motor_set_position(wheels[1], INFINITY);
                         wb_motor_set_velocity(wheels[1], -1);
                         wb_robot_step(TIME_STEP);
                     }
-                    */
+                    
                     hardRightf(-1.25);
                     line_follow = 1;
                 }
@@ -554,7 +631,7 @@ int main(int argc, char** argv) {
 
        
         //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
-        //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6], error[7]);
+        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6], error[7]);
         /* Process sensor data here */
        
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
