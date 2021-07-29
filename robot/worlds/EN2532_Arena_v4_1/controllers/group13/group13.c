@@ -19,7 +19,7 @@
 #include <webots/camera.h>
 #include <stdlib.h>
   ////////////////////////////////////// * MACROS ///////////////////////////////////////////////
-
+#define LINE_THRESH 500
 #define TIME_STEP 16
 /* Line Follow */
 #define nQTR 8
@@ -34,25 +34,30 @@ double qtrValues[8] = { 0,0,0,0,0,0,0,0 };
 double qtrNew[nQTR] = { 0, 0, 0, 0, 0,0,0,0 };
 double maxGS[nQTR] = { 500, 500, 500, 500, 500, 500, 500, 500 };
 double minGS[nQTR] = { 500, 500, 500, 500, 500, 500, 500, 500 };
-double qtrStore[7][5];
+double qtrStore[8];
 char QTR_names[nQTR][6] = { "qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7" };
 char wheels_names[2][12] = { "right_motor", "left_motor" };
-double error[8] = { 0,0,0,0,0,0,0,0 };
-double weights[8] = { 0,-2.7,-1.3,-0.8,0,0.8,1.3,2.7};
-double Kp = 0.15;
-double Kd = 0.04;
+unsigned int error[8] = { 0,0,0,0,0,0,0,0 };
+double weights[8] = { 0,1000,2000,3000,4000,5000,6000,7000};
+
+//
+double Kp = 0.448;
+double Kd = 0.15;                                                          
 double P = 0;
 double D = 0;
 double pEr = 0;
-double baseSpeed = 400;  //  rad/s
+double baseSpeed = 750;  //  rad/s
 double Speeds[2] = { 0,0 };
 double PID = 0;
 short junc = -1;
+double eSUM = 0;
+double coeff = 1;
 unsigned short int state = 0;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quardrant = 0;
 unsigned char path;
-
+unsigned int left = 0;
+unsigned int right = 0;
 int line_follow = 0;
 int wall_flag = 0;
 int state4 = 0;
@@ -125,113 +130,59 @@ void selectionSort(double arr[], int n)
 
 
 
-void ReadQTR(WbDeviceTag* QTRa) {
-    /*
-    Read all 7 IR distance sensors and update their values in qtrNew array
-    update error array
-    set hardLeft hardRight flags
-    */
-    for (int i = 0; i < nQTR; i++) {
-        qtrValues[i] = wb_distance_sensor_get_value(QTRa[i]);
-
-        //    Max & Min detection
-        if (qtrValues[i] < minGS[i]) minGS[i] = qtrValues[i];
-        if (qtrValues[i] > maxGS[i]) maxGS[i] = qtrValues[i];
-
-        // linear Interpolation
-        qtrNew[i] = ((double)qtrValues[i] - minGS[i]) / (maxGS[i] - MIN_GS) * NEW_GS;
-
-        // Limited values between 0 and 1000 (NEW_GS)
-        if (qtrNew[i] > NEW_GS) qtrNew[i] = NEW_GS;
-        if (qtrNew[i] < 0) qtrNew[i] = 0;
-
-        if (qtrNew[i] < 70) {
-            error[i] = 0;
-        }
-        else {
-            error[i] = 1000;//qtrNew[i] - 70;
-        }
-
-        //error[i] = qtrNew[i] - 70;
-    }
-    /*
-    if ((error[1] == 0) && (error[2] == 0) && (error[3] == 0) && (error[4] == 0) && (error[5] == 0) && (error[6] == 1000) && (error[7] == 1000))  {
-
-          hardLeft = 1;
-          printf("hardleft");
-      }
-      else {
-          hardLeft = 0;
-      }
-      if ((error[1] == 1000) && (error[2] == 1000) && (error[3] == 0) && (error[4] == 0) && (error[5] == 0) && (error[6] == 0) && (error[7] == 0)) {
-
-          hardRight = 1;
-
-      }
-      else {
-          hardRight = 0;
-      }
-
- */
-}
-
-
 void ReadQTR2(WbDeviceTag QTRa[]) {
 
-    for (int i = 0; i < nQTR - 1; i++) {
+        qtrStore[0] = wb_distance_sensor_get_value(QTRa[0]);
+        qtrStore[1] = wb_distance_sensor_get_value(QTRa[1]);
+        qtrStore[2] = wb_distance_sensor_get_value(QTRa[2]);
+        qtrStore[3] = wb_distance_sensor_get_value(QTRa[3]);
+        qtrStore[4] = wb_distance_sensor_get_value(QTRa[4]);
+        qtrStore[5] = wb_distance_sensor_get_value(QTRa[5]);
+        qtrStore[6] = wb_distance_sensor_get_value(QTRa[6]);
+        qtrStore[7] = wb_distance_sensor_get_value(QTRa[7]);
 
-        qtrStore[0][i] = wb_distance_sensor_get_value(QTRa[1]); // neglect leftmost sensor
-        qtrStore[1][i] = wb_distance_sensor_get_value(QTRa[2]);
-        qtrStore[2][i] = wb_distance_sensor_get_value(QTRa[3]);
-        qtrStore[3][i] = wb_distance_sensor_get_value(QTRa[4]);
-        qtrStore[4][i] = wb_distance_sensor_get_value(QTRa[5]);
-        qtrStore[5][i] = wb_distance_sensor_get_value(QTRa[6]);
-        qtrStore[6][i] = wb_distance_sensor_get_value(QTRa[7]);
-
-    }
-    selectionSort(qtrStore[0], BUFLEN);
-    selectionSort(qtrStore[1], BUFLEN);
-    selectionSort(qtrStore[2], BUFLEN);
-    selectionSort(qtrStore[3], BUFLEN);
-    selectionSort(qtrStore[4], BUFLEN);
-    selectionSort(qtrStore[5], BUFLEN);
-    selectionSort(qtrStore[6], BUFLEN);
-
-    for (int i = 0; i < 7; i++) {
-        error[i] = qtrStore[i][3] - 250;
-
-    }
-
-
+        error[0] = ((LINE_THRESH - qtrStore[0]) > 0);
+        error[1] = ((LINE_THRESH - qtrStore[1]) > 0);
+        error[2] = ((LINE_THRESH - qtrStore[2]) > 0);
+        error[3] = ((LINE_THRESH - qtrStore[3]) > 0);
+        error[4] = ((LINE_THRESH - qtrStore[4]) > 0);
+        error[5] = ((LINE_THRESH - qtrStore[5]) > 0);
+        error[6] = ((LINE_THRESH - qtrStore[6]) > 0);
+        error[7] = ((LINE_THRESH - qtrStore[7]) > 0);
 }
 
 short j_check(void) {
 
     ReadQTR2(QTR);
-    if ((error[0] < 350) && (error[1] < 350) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] > 400) && (error[6] > 400)) {
+    if ((error[0] ==1) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 0) && (error[6] == 0)&&(error[7] == 0)) {
+        printf("left junction found");
+        return 1;
+
+    }
+    else if ((error[0] == 1) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 0) && (error[7] == 0)) {
         printf("left junction found");
         return 1;
 
     }
 
-    if ((error[0] > 400) && (error[1] > 400) && (error[2] < 350) && (error[3] < 350) && (error[4] < 350) && (error[5] < 350) && (error[6] < 350)) {
+    else if ((error[0] == 0) && (error[1] == 0) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 1)&&(error[7]==1)) {
 
         printf("right junction found");
         return 2;
     }
-    /* unsigned int flag = 1;
-     for (int i = 0; i < 7; i++) {
-         flag = flag && (error[i] < 100);
+    else if ((error[0] == 0) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 1) && (error[7] == 1)) {
+
+        printf("right junction found");
+        return 2;
+    }
+     unsigned int flag = 1;
+     for (int i = 0; i < 8; i++) {
+         flag = flag && (error[i] == 1);
+         wb_robot_step(TIME_STEP);
+     }
      if(flag) {
          return 3;
      }
-     }
-     */
-    if ((error[0] < 150) && (error[1] < 150) && (error[2] < 150) && (error[3] < 150) && (error[4] < 150) && (error[5] < 150) && (error[6] < 150)) {
-
-        printf("T junction found");
-        return 3;
-    }
 
 
     printf("NO JUNCT");
@@ -331,39 +282,41 @@ void hardRightf(double angle, double RightSpeed, double LeftSpeed) {
 }
 
 
-void lineFollow(void) {
-    double eSUM = 0;
-
-    for (int i = 1; i < 8; i++) { //neglect the leftmost sensor
-        eSUM += error[i] * weights[i];
-    }
-    printf("Total error %f", eSUM);
-    P = Kp * eSUM;
-    D = Kd * (eSUM - pEr);
-    PID = P + D;
-    Speeds[0] = baseSpeed + PID;
-    Speeds[1] = baseSpeed - PID;
-    pEr = eSUM;
-}
-
 void lineFollow2(double coeff) {
     if (line_follow == 1) {
-        double eSUM2 = 0;
-        for (int i = 0; i < 7; i++) { //neglect the leftmost sensor
-            eSUM2 += error[i] * weights[i + 1];
+        eSUM = 0;
+        double denominator = 0;
+        for (int i = 0; i < 8; i++) { 
+            eSUM += (error[i] * weights[i]);
+            denominator += error[i];
         }
-        P = Kp * eSUM2;
-        D = Kd * (eSUM2 - pEr);
+        printf("RAW eSUM = %f\n", eSUM);
+        printf("Denominator = %f\n", denominator);
+        if (denominator != 0) {
+            eSUM = eSUM / denominator;
+        }
+        
+        eSUM -= 3500;
+
+        if (state == 9) {
+            if (denominator == 0) {
+                eSUM = 0;
+            }
+        }
+        
+        printf("%f\n", eSUM);
+        P = Kp * eSUM;
+        D = Kd * (eSUM - pEr);
         PID = P + D;
-        Speeds[0] = baseSpeed / coeff + PID;
-        Speeds[1] = baseSpeed / coeff - PID;
-        pEr = eSUM2;
-        printf("%f\n", PID);
+        Speeds[0] = (baseSpeed / coeff) - PID;
+        Speeds[1] = (baseSpeed / coeff) + PID;
+        pEr = eSUM;
+        
 
         wb_motor_set_position(wheels[0], INFINITY);
-        wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+        wb_motor_set_velocity(wheels[0], 0.002 * Speeds[0]);
         wb_motor_set_position(wheels[1], INFINITY);
-        wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+        wb_motor_set_velocity(wheels[1], 0.002 * Speeds[1]);
     }
 }
 
@@ -651,7 +604,8 @@ int main(int argc, char** argv) {
             wall_flag = 0;
             state++;
         }
-        if ((state == 1) || (state == 3)) {
+        /*(state == 1) ||*/
+       /* if(state == 3) {
 
             if (junc == 1) {
                 hardLeftf(1.25, 2.5, -0.5);
@@ -661,7 +615,7 @@ int main(int argc, char** argv) {
                 junc = -1;
             }
 
-        }
+        }*/
 
         if ((state == 3) && (junc == 3)) {
 
@@ -798,10 +752,11 @@ int main(int argc, char** argv) {
             line_follow = 1;
             if (quardrant < 4) {
                 if (junc == 3) {
-                    hardLeftf(1.4, 2.5, -0.5);
+                    hardLeftf(1.65, 2.5, -0.5);
                 }
                 if (junc == 2) {
                     hardRightf(-1.27, -0.5, 2.5);
+                    state++;
                 }
 
             }
@@ -809,23 +764,29 @@ int main(int argc, char** argv) {
 
                 if (junc == 3) {
                     hardRightf(-1.4, -0.5, 2.5);
+                    state++;
                 }
                 if (junc == 1) {
                     hardLeftf(1.4, 2.5, -0.5);
+                    state++;
                 }
 
             }
 
         }
 
-
+        if (state == 9) {
+            //Kp = 0.5;
+            //Kd = 0.4;
+            coeff = 3;
+        }
         wall_follow();
         ReadQTR2(QTR);
-        lineFollow2(1);
+        lineFollow2(coeff);
 
 
         //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
-        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6]);
+        printf("%d   %d   %d   %d    %d    %d   %d   %d\t", error[0], error[1], error[2], error[3], error[4], error[5], error[6],error[7]);
         /* Process sensor data here */
 
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
