@@ -227,7 +227,7 @@ short j_check(void) {
     }
     }
     */
-    if ((error[0] < 100) && (error[1] < 100) && (error[2] < 100) && (error[3] < 100) && (error[4] < 100) && (error[5] < 100) && (error[6] < 100)) {
+    if ((error[0] < 150) && (error[1] < 150) && (error[2] < 150) && (error[3] < 150) && (error[4] < 150) && (error[5] < 150) && (error[6] < 150)) {
 
         printf("T junction found");
         return 3;
@@ -367,7 +367,7 @@ void lineFollow2(double coeff) {
     }
 }
 
-unsigned short readColor(WbDeviceTag camera) {
+unsigned short int readColor(WbDeviceTag camera) {
     /*
     Returns the color detected as a char 'R','G','B'
     the color test is performed in the given order
@@ -379,6 +379,22 @@ unsigned short readColor(WbDeviceTag camera) {
 
 
     */
+    unsigned char* image = wb_camera_get_image(camera);
+    unsigned short levels[3];
+    levels[0] = wb_camera_image_get_red(image, 8, 4, 4);
+    levels[1] = wb_camera_image_get_green(image, 8, 4, 4);
+    levels[2] = wb_camera_image_get_blue(image, 8, 4, 4);
+    unsigned int max = 0;
+    unsigned short int maxIndex = 0;
+    for (unsigned short int i = 0; i < 3; i++) {
+        if (levels[i] > max) {
+            max = levels[i];
+            maxIndex = i;
+        }
+    }
+    return maxIndex+1;
+
+    /*
     unsigned char R = 'R';
     unsigned char G = 'G';
     unsigned char B = 'B';
@@ -398,6 +414,7 @@ unsigned short readColor(WbDeviceTag camera) {
     else {
         return 0;
     }
+    */
 }
 
 /* wall follow */
@@ -718,7 +735,7 @@ int main(int argc, char** argv) {
            if (state == 6) {
                 
                 if (wb_distance_sensor_get_value(ds[0]) < 100) {
-                    for (int i = 0; i < 25; i++) {
+                    for (int i = 0; i < 40; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
                         wb_motor_set_position(wheels[1], INFINITY);
@@ -741,9 +758,12 @@ int main(int argc, char** argv) {
                printf("LIFTING BOX\n");
                Lifting_box(&linear, &S1, &S2, lr_1, lr_2, Sr_1, Sr_2);
                printf("BOX LIFTED, READING COLOR\n");
-               unsigned short frontColor = readColor(CAM2);
+               for (int i = 0; i < 30; i++) {
+                   wb_robot_step(TIME_STEP);
+               }
+               unsigned short int frontColor = readColor(CAM1);
                printf("Front Color \t%d\n", frontColor);
-               unsigned short bottomColor = readColor(CAM1);
+               unsigned short int bottomColor = readColor(CAM2);
                printf("Bottom Color \t%d\n", bottomColor);
                if ((abs(frontColor -bottomColor)%2)==1) {
                    path = 'R';
