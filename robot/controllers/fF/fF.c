@@ -50,7 +50,8 @@ double PID = 0;
 short junc = -1;
 unsigned short int state = 0;
 char ds_names[3][10] = {"front_ir","left_ir","right_ir"};
-unsigned short radius = 0;
+unsigned short quardrant = 0;
+
 
 int line_follow = 0;
 int wall_flag = 0;
@@ -67,6 +68,16 @@ unsigned char blue;
 
 WbDeviceTag CAM1;
 WbDeviceTag CAM2;
+
+/*  ARM   */
+WbDeviceTag lr_1;
+WbDeviceTag lr_2;
+WbDeviceTag Sr_1;
+WbDeviceTag Sr_2;
+
+double S1 = 0.0;
+double S2 = 3.12;
+double linear = 0.0;
 
 /*
 void readQTR(WbDeviceTag *QTRarray) {
@@ -226,7 +237,7 @@ short j_check(void) {
     printf("NO JUNCT");
     return -1;
 }
-void hardLeftf(double angle) {
+void hardLeftf(double angle, double RightSpeed, double LeftSpeed) {
     double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
     double readAngle = initAngle;
     double prevAngle = initAngle;
@@ -236,8 +247,8 @@ void hardLeftf(double angle) {
     printf("HARDLEFT\n");
     printf("InitAngle = %f\n",initAngle);
     while (readAngle - initAngle < angle) {
-        wb_motor_set_velocity(wheels[0], 2.5);
-        wb_motor_set_velocity(wheels[1], -0.5);
+        wb_motor_set_velocity(wheels[0], RightSpeed);
+        wb_motor_set_velocity(wheels[1], LeftSpeed);
         readAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
         printf("read RAW = %f\t", readAngle);
         if (abs(prevAngle - readAngle) > 5) {
@@ -272,7 +283,7 @@ void hardLeftf(double angle) {
     }
     
 }
-void hardRightf(double angle) {
+void hardRightf(double angle,double RightSpeed, double LeftSpeed) {
     double initAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
     double readAngle = initAngle;
     double prevAngle = initAngle;
@@ -282,8 +293,8 @@ void hardRightf(double angle) {
     printf("HARDRIGHT\n");
     printf("InitAngle = %f\n", initAngle);
     while (readAngle - initAngle > angle) {
-        wb_motor_set_velocity(wheels[0], -0.5);
-        wb_motor_set_velocity(wheels[1], 2.5);
+        wb_motor_set_velocity(wheels[0], RightSpeed);
+        wb_motor_set_velocity(wheels[1], LeftSpeed);
         readAngle = wb_inertial_unit_get_roll_pitch_yaw(IMU)[2];
         printf("read RAW = %f\t", readAngle);
         if (abs(prevAngle - readAngle) > 5) {
@@ -443,6 +454,71 @@ void wall_follow(void) {
     
 }
 
+/* Lifting Box*/
+
+void Lifting_box(double* linear, double* S1, double* S2, WbDeviceTag lr_1, WbDeviceTag lr_2, WbDeviceTag Sr_1, WbDeviceTag Sr_2) {
+
+
+    while (*S1 < 2.12) {
+        *S1 += 0.04;
+        wb_motor_set_position(Sr_1, *S1);
+        wb_robot_step(TIME_STEP);
+    }
+
+    while (*linear > -0.02) {
+        *linear -= 0.001;
+        wb_motor_set_position(lr_1, -*linear);
+        wb_motor_set_position(lr_2, *linear);
+        wb_robot_step(TIME_STEP);
+    }
+
+    while (*S1 > 1) {
+        *S1 -= 0.04;
+        wb_motor_set_position(Sr_1, *S1);
+        wb_robot_step(TIME_STEP);
+    }
+
+    while (*S2 >= 0) {
+        *S2 -= 0.04;
+        wb_motor_set_position(Sr_2, *S2);
+        wb_robot_step(TIME_STEP);
+    }
+
+    while (*S1 >= 0.2) {
+        *S1 -= 0.04;
+        wb_motor_set_position(Sr_1, *S1);
+        wb_robot_step(TIME_STEP);
+    }
+    printf("Servor 1 value is %f\n", *S1);
+    wb_robot_step(TIME_STEP);
+
+}
+
+/* Placing box*/
+void Placing_box(double* linear, double* S1, WbDeviceTag lr_1, WbDeviceTag lr_2, WbDeviceTag Sr_1) {
+    printf("Servor 1 value is %f\n", *S1);
+    while (*S1 < 2.12) {
+        *S1 += 0.04;
+        wb_motor_set_position(Sr_1, *S1);
+        wb_robot_step(TIME_STEP);
+    }
+    while (*linear <= 0.0) {
+        *linear += 0.001;
+        wb_motor_set_position(lr_1, -*linear);
+        wb_motor_set_position(lr_2, *linear);
+        wb_robot_step(TIME_STEP);
+    }
+
+    while (*S1 >= 0.6) {
+        *S1 -= 0.04;
+        wb_motor_set_position(Sr_1, *S1);
+        wb_robot_step(TIME_STEP);
+    }
+
+    wb_robot_step(TIME_STEP);
+
+}
+
 
 /*
  * This is the main program.
@@ -497,6 +573,19 @@ int main(int argc, char** argv) {
         printf("Initialized ds %d\n",i);
     }
 
+    /*Initialize ARM*/
+
+    Sr_1 = wb_robot_get_device("Servo1");
+    Sr_2 = wb_robot_get_device("Servo2");
+    lr_1 = wb_robot_get_device("linear1");
+    lr_2 = wb_robot_get_device("linear2");
+
+    wb_motor_set_position(lr_1, -linear);
+    wb_motor_set_position(lr_2, linear);
+    wb_motor_set_position(Sr_2, S2);
+    wb_motor_set_position(Sr_1, S1);
+
+
     /* main loop
      * Perform simulation steps of TIME_STEP milliseconds
      * and leave the loop when the simulation is over
@@ -534,6 +623,13 @@ int main(int argc, char** argv) {
             state++;
         }
         if ((state == 2) && (wb_distance_sensor_get_value(ds[2]) >= 1000) && (wb_distance_sensor_get_value(ds[1]) >= 1000)) {
+            for (int i = 0; i < 20; i++) {
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+                wb_robot_step(TIME_STEP);
+            }
             line_follow = 1;
             wall_flag = 0;
             state++;
@@ -541,10 +637,10 @@ int main(int argc, char** argv) {
         if ((state == 1)|| (state ==3)){
             
             if (junc == 1) {
-                hardLeftf(1.25);
+                hardLeftf(1.25,2.5,-0.5);
             }
             if (junc == 2) {
-                hardRightf(-1.47);
+                hardRightf(-1.47,-0.5,2.5);
                 junc = -1;
             }
 
@@ -552,9 +648,10 @@ int main(int argc, char** argv) {
         
         if ((state == 3)&& (junc ==3)) {
 
-            hardRightf(-1.3);
+            hardRightf(-1.3,-0.5,2.5);
             line_follow = 1;
             Kp = 0.1;
+            quardrant = 1;
             state++;
 
         }
@@ -562,10 +659,9 @@ int main(int argc, char** argv) {
 
             if (junc == 1) {
                 line_follow = 0;
-                hardLeftf(1.57);
+                hardLeftf(1.57,2.5,-0.5);
                 state++;
                 printf("STATE is %d \t LINE_FOLLOW is %d\n", state, line_follow);
-                radius++;
             }
         }
             if (state == 5) {
@@ -577,15 +673,22 @@ int main(int argc, char** argv) {
                     wb_robot_step(TIME_STEP);
                 }
                 */
-                Speeds[0] = baseSpeed;
-                Speeds[1] = baseSpeed;
+                printf("BACKING");
+                for (int i = 0; i < 120; i++) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], -1);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], -1);
+                    wb_robot_step(TIME_STEP);
+                }
 
-                for (int i = 0; i < 130; i++) {
+                /*for (int i = 0; i < 50; i++) {
+                    line_follow = 1;
                     ReadQTR2(QTR);
-                    lineFollow2(2);
+                    lineFollow2(1);
                     wb_robot_step(TIME_STEP);
                     printf("calibration line follow\n");
-                }
+                } */
 
                 double temp = wb_distance_sensor_get_value(ds[0]);
                 printf("DISTANCE aftr LEFT TURN IS %f\n", temp);
@@ -596,33 +699,88 @@ int main(int argc, char** argv) {
                 }
                 else {
                     state--;
-                    printf("BACKING");
-                    for (int i = 0; i < 130; i++) {
+                    printf("NO BOX ON RADIUS");
+                    /*for (int i = 0; i < 130; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], -1);
                         wb_motor_set_position(wheels[1], INFINITY);
                         wb_motor_set_velocity(wheels[1], -1);
                         wb_robot_step(TIME_STEP);
                     }
+                    */
                     
-                    hardRightf(-1.25);
+                    hardRightf(-1.25,-0.5,2.5);
+                    quardrant++;
                     line_follow = 1;
                 }
             }
 
            if (state == 6) {
                 
-                if (wb_distance_sensor_get_value(ds[0]) < 80) {
-                    printf("APRROACHED BOX at 7cm");
+                if (wb_distance_sensor_get_value(ds[0]) < 100) {
+                    for (int i = 0; i < 25; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    printf("APRROACHED BOX at 10cm");
                     line_follow = 0;
                     line_follow = 0;
+
                     wb_motor_set_position(wheels[0], INFINITY);
                     wb_motor_set_velocity(wheels[0], 0);
                     wb_motor_set_position(wheels[1], INFINITY);
                     wb_motor_set_velocity(wheels[1], 0);
+                    state++;
                 }
                 
             }
+           if (state == 7) {
+               printf("LIFTING BOX\n");
+               Lifting_box(&linear, &S1, &S2, lr_1, lr_2, Sr_1, Sr_2);
+               printf("BOX LIFTED, READING COLOR\n");
+               for (int i = 0; i < 100; i++) {
+                   wb_robot_step(TIME_STEP);
+               }
+               printf("PLACING BOX BACK");
+               Placing_box(&linear, &S1, lr_1, lr_2, Sr_1);
+               printf("BACKING");
+               for (int i = 0; i < 50; i++) {
+                   wb_motor_set_position(wheels[0], INFINITY);
+                   wb_motor_set_velocity(wheels[0], -1);
+                   wb_motor_set_position(wheels[1], INFINITY);
+                   wb_motor_set_velocity(wheels[1], -1);
+                   wb_robot_step(TIME_STEP);
+               }
+               hardLeftf(2.7,2.5,-2.5);
+               state++;
+           }
+
+           if (state ==8){
+               line_follow = 1;
+               if (quardrant < 4) {
+                   if (junc == 3) {
+                       hardLeftf(1.4, 2.5, -0.5);
+                   }
+                   if (junc == 2) {
+                       hardRightf(-1.27, -0.5, 2.5);
+                   }
+
+               }
+               else {
+
+                   if (junc == 3) {
+                       hardRightf(-1.4, -0.5, 2.5);
+                   }
+                   if (junc == 1) {
+                       hardLeftf(1.4, 2.5, -0.5);
+                   }
+
+               }
+               
+           }
             
        
         wall_follow();
