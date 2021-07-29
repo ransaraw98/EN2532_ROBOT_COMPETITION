@@ -51,7 +51,7 @@ short junc = -1;
 unsigned short int state = 0;
 char ds_names[3][10] = {"front_ir","left_ir","right_ir"};
 unsigned short quardrant = 0;
-
+unsigned char path;
 
 int line_follow = 0;
 int wall_flag = 0;
@@ -367,7 +367,7 @@ void lineFollow2(double coeff) {
     }
 }
 
-unsigned char readColor(WbDeviceTag camera) {
+unsigned short readColor(WbDeviceTag camera) {
     /*
     Returns the color detected as a char 'R','G','B'
     the color test is performed in the given order
@@ -386,13 +386,13 @@ unsigned char readColor(WbDeviceTag camera) {
     unsigned char* image = wb_camera_get_image(camera);
 
     if (wb_camera_image_get_red(image, 8, 4, 4) > 200) {
-        return R;
+        return 1;
     }
     else if (wb_camera_image_get_green(image, 8, 4, 4) > 200) {
-        return G;
+        return 2;
     }
     else if (wb_camera_image_get_blue(image, 8, 4, 4) > 200) {
-        return B;
+        return 3;
     }
 
     else {
@@ -741,6 +741,17 @@ int main(int argc, char** argv) {
                printf("LIFTING BOX\n");
                Lifting_box(&linear, &S1, &S2, lr_1, lr_2, Sr_1, Sr_2);
                printf("BOX LIFTED, READING COLOR\n");
+               unsigned short frontColor = readColor(CAM2);
+               printf("Front Color \t%d\n", frontColor);
+               unsigned short bottomColor = readColor(CAM1);
+               printf("Bottom Color \t%d\n", bottomColor);
+               if ((abs(frontColor -bottomColor)%2)==1) {
+                   path = 'R';
+               }
+               else {
+                   path = 'L';
+               }
+               printf("Path is%c", path);
                for (int i = 0; i < 100; i++) {
                    wb_robot_step(TIME_STEP);
                }
