@@ -38,7 +38,7 @@ double qtrStore[7][5];
 char QTR_names[nQTR][6] = { "qtr0","qtr1","qtr2","qtr3","qtr4","qtr5","qtr6","qtr7" };
 char wheels_names[2][12] = { "right_motor", "left_motor" };
 double error[8] = { 0,0,0,0,0,0,0,0 };
-double weights[8] = { 0,-2.2,-1.5,-1,0,1,1.5,2.2 };
+double weights[8] = { 0,-2.7,-1.3,-0.8,0,0.8,1.3,2.7};
 double Kp = 0.15;
 double Kd = 0.04;
 double P = 0;
@@ -735,17 +735,22 @@ int main(int argc, char** argv) {
         if (state == 6) {
 
             if (wb_distance_sensor_get_value(ds[0]) < 100) {
-                for (int i = 0; i < 45; i++) {
+                line_follow = 0;
+                for (int i = 0; i < 50; i++) {
+                    wb_motor_set_velocity(wheels[0], 0);
+                    wb_motor_set_velocity(wheels[1], 0);
+                    wb_robot_step(TIME_STEP);
+                }
+                printf("right speed%f\n", Speeds[0]);
+                printf("right speed%f\n", Speeds[1]);
+                for (int i = 0; i < 55; i++) {
                     wb_motor_set_position(wheels[0], INFINITY);
-                    wb_motor_set_velocity(wheels[0], 1.5);
+                    wb_motor_set_velocity(wheels[0], 2);
                     wb_motor_set_position(wheels[1], INFINITY);
-                    wb_motor_set_velocity(wheels[1], 1.5);
+                    wb_motor_set_velocity(wheels[1], 2);
                     wb_robot_step(TIME_STEP);
                 }
                 printf("APRROACHED BOX at 10cm");
-                line_follow = 0;
-                line_follow = 0;
-
                 wb_motor_set_position(wheels[0], INFINITY);
                 wb_motor_set_velocity(wheels[0], 0);
                 wb_motor_set_position(wheels[1], INFINITY);
@@ -820,7 +825,7 @@ int main(int argc, char** argv) {
 
 
         //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
-        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6], error[7]);
+        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f", error[0], error[1], error[2], error[3], error[4], error[5], error[6]);
         /* Process sensor data here */
 
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));

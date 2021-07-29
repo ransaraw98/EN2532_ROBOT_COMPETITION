@@ -17,7 +17,7 @@ while (robot.step(timestep) != -1):
     m.setVelocity(speed)
     k = pSensor.getValue()
     t += timestep
-    print (t)
+    #print (t)
     if (k > 22) & (speed ==3) & (t>0):
         speed =0
     if (k > 22) & (speed ==0) & (t >10000) :
