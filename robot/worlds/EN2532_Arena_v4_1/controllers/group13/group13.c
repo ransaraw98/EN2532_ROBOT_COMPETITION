@@ -51,10 +51,10 @@ double PID = 0;
 short junc = -1;
 double eSUM = 0;
 double coeff = 1;
-unsigned short int state = 0;
+unsigned short int state = 9;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quardrant = 0;
-unsigned char path;
+unsigned char path =  'L';
 unsigned int left = 0;
 unsigned int right = 0;
 int line_follow = 0;
@@ -175,7 +175,13 @@ short j_check(void) {
         printf("\tright junction found\t");
         return 2;
     }
-     unsigned int flag = 1;
+
+    else if ((error[0] == 1) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 1) && (error[7] == 1)) {
+        printf("\tT junction found \t");
+        return 3;
+
+    }
+     /*unsigned int flag = 1;
      for (int i = 0; i < 8; i++) {
          flag = flag && (error[i] == 1);
          wb_robot_step(TIME_STEP);
@@ -183,7 +189,7 @@ short j_check(void) {
      if(flag) {
          return 3;
      }
-
+     */
 
     printf("NO JUNCT");
     return -1;
@@ -776,17 +782,10 @@ int main(int argc, char** argv) {
 
         if (state == 9) {
             //Kp = 0.5;
-            //Kd = 0.4;
+            line_follow = 1;
             coeff = 3;
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
                 unsigned char ramp[] = "INCLINE DETECTED";
-            }
-            else if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.31) {
-               unsigned char ramp[] = "DECLINE DETECTED";
-               Kp = 0.02;
-               Kd = 0.001;
-               coeff = 10;
-               // state++;
             }
             if (junc == 3) {
                 if (path == 'R') {
@@ -798,7 +797,7 @@ int main(int argc, char** argv) {
                         wb_robot_step(TIME_STEP);
                     }
                     hardRightf(-1.4, -1, 1);
-                    state++;
+                    //state++;
                 }
                 else if (path == 'L') {
                     for (int i = 0; i < 100; i++) {
@@ -809,39 +808,30 @@ int main(int argc, char** argv) {
                         wb_robot_step(TIME_STEP);
                     }
                     hardLeftf(1.4, 1, -1);
-                    state++;
+                    //state++;
                 }
             }
         }
 
         if (state == 10) {
-            LINE_THRESH = 300;
-            /*if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0) {
-                coeff = 1;
-            }
-            if (junc == 3) {
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.3) {
                 line_follow = 0;
-                wb_motor_set_position(wheels[0], INFINITY);
-                wb_motor_set_velocity(wheels[0], 0);
-                wb_motor_set_position(wheels[1], INFINITY);
-                wb_motor_set_velocity(wheels[1], 0);
                 state++;
             }
-            */
-            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.2) {
-                while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < 0) {
-                    wb_motor_set_position(wheels[0], INFINITY);
-                    wb_motor_set_velocity(wheels[0], 0.1);
-                    wb_motor_set_position(wheels[1], INFINITY);
-                    wb_motor_set_velocity(wheels[1], 0.1);
-                    wb_robot_step(TIME_STEP);
-                }
+            else {
+                line_follow = 1;
             }
         }
 
         if (state == 11) {
+            wb_motor_set_position(wheels[0], INFINITY);
+            wb_motor_set_velocity(wheels[0], 0.1);
+            wb_motor_set_position(wheels[1], INFINITY);
+            wb_motor_set_velocity(wheels[1], 0.1);
 
-
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.02) {
+                state++;
+            }
 
         }
         wall_follow();
