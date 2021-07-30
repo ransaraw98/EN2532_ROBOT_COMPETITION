@@ -781,10 +781,13 @@ int main(int argc, char** argv) {
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
                 unsigned char ramp[] = "INCLINE DETECTED";
             }
-            else if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.1) {
+            else if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.31) {
                 unsigned char ramp[] = "DECLINE DETECTED";
+                line_follow = 0;
+                wb_motor_get_max_velocity(wheels[0],0);
+                wb_motor_get_max_velocity(wheels[1], 0);
                 coeff = 4;
-                state++;
+               // state++;
             }
             if (junc == 3) {
                 if (path == 'R') {

@@ -897,8 +897,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018599991273289207 -0.009288098851301338 0.004659086527582826
-            rotation 1.2928239760025435e-06 0.8295052310058003 0.558498945148818 3.1415854683059417
+            translation -0.01859999127328916 -0.009288098851301338 0.004659086527582826
+            rotation 1.2928239760313632e-06 0.8295052310058004 0.5584989451488181 3.1415854683059417
             children [
               Transform {
                 translation 0 0 0.0155
@@ -914,7 +914,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 5.529591690944795e-10 -1.8366655239323964e-06 0.015999957062561836
+                      translation 5.529591690945259e-10 -1.836665523932395e-06 0.015999957062561836
                       rotation 0 0 1 3.1199999788022375
                       children [
                         Transform {
@@ -1864,7 +1864,9 @@ Robot {
       device [
         RotationalMotor {
           name "left_motor"
+          controlPID 0 0 0
           maxVelocity 40
+          maxTorque 0.84738
         }
       ]
       endPoint DEF WHEEL_LEFT Solid {
@@ -1898,7 +1900,9 @@ Robot {
       device [
         RotationalMotor {
           name "right_motor"
+          controlPID 0 0 0
           maxVelocity 40
+          maxTorque 0.84738
         }
       ]
       endPoint Solid {
