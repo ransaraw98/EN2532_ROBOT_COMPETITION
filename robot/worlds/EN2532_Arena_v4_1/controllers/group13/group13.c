@@ -40,7 +40,7 @@ unsigned int error[8] = { 0,0,0,0,0,0,0,0 };
 double weights[8] = { 0,1000,2000,3000,4000,5000,6000,7000};
 
 //
-double Kp = 0.45;
+double Kp = 0.46;
 double Kd = 0.15;                                                          
 double P = 0;
 double D = 0;
@@ -783,24 +783,40 @@ int main(int argc, char** argv) {
             }
             else if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.31) {
                unsigned char ramp[] = "DECLINE DETECTED";
-               Kp = 0.1;
-               Kd = 0.01;
-               coeff = 6;
+               Kp = 0.02;
+               Kd = 0.001;
+               coeff = 10;
                // state++;
             }
             if (junc == 3) {
                 if (path == 'R') {
-                    hardRightf(-1.3, -0.5, 2.5);
+                    for (int i = 0; i < 100; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], 1.5);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], 1.5);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    hardRightf(-1.4, -1, 1);
+                    state++;
                 }
                 else if (path == 'L') {
-                    hardLeftf(1.4, 2.5, -0.5);
+                    for (int i = 0; i < 100; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], 1.5);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], 1.5);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    hardLeftf(1.4, 1, -1);
+                    state++;
                 }
             }
         }
 
         if (state == 10) {
             LINE_THRESH = 300;
-            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0) {
+            /*if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0) {
                 coeff = 1;
             }
             if (junc == 3) {
@@ -810,6 +826,16 @@ int main(int argc, char** argv) {
                 wb_motor_set_position(wheels[1], INFINITY);
                 wb_motor_set_velocity(wheels[1], 0);
                 state++;
+            }
+            */
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.2) {
+                while (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < 0) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], 0.1);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], 0.1);
+                    wb_robot_step(TIME_STEP);
+                }
             }
         }
 
