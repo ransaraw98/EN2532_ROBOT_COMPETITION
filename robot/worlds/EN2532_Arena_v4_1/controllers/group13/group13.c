@@ -40,7 +40,7 @@ unsigned int error[8] = { 0,0,0,0,0,0,0,0 };
 double weights[8] = { 0,1000,2000,3000,4000,5000,6000,7000};
 
 //
-double Kp = 0.448;
+double Kp = 0.45;
 double Kd = 0.15;                                                          
 double P = 0;
 double D = 0;
