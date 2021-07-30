@@ -16,8 +16,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.42331489474229456 -0.8074221432595944 -0.41094279706961984 1.7921568018256306
-  position -1.8603049398551903 4.34183394744106 -1.4716952993487764
+  orientation 0.06638394797776122 0.9150737545756864 0.39778536315158997 3.404759005370119
+  position 0.01646865093087778 1.0145064572223195 -1.0635884636865944
 }
 TexturedBackground {
 }
@@ -90,7 +90,8 @@ DEF Ramp_Area Solid {
       rotation 0 0 1 0.349
       children [
         Shape {
-          appearance Appearance {
+          appearance PBRAppearance {
+            metalness 0
           }
           geometry Box {
             size 0.0412 0.0011 0.003
@@ -126,6 +127,9 @@ DEF Ramp_Area Solid {
       translation 0.003 0.004 0.0905
       children [
         Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
           geometry Box {
             size 0.003 0.00101 0.0164
           }
@@ -140,6 +144,9 @@ DEF Ramp_Area Solid {
       translation 0.003 0.004 0.1
       children [
         Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
           geometry Box {
             size 0.035 0.00101 0.003
           }
@@ -174,6 +181,9 @@ DEF Ramp_Area Solid {
       rotation 0 0 1 -0.34957
       children [
         Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
           geometry Box {
             size 0.0412 0.0011 0.003
           }
@@ -209,6 +219,9 @@ DEF Ramp_Area Solid {
       rotation 1 0 0 -0.349
       children [
         Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
           geometry Box {
             size 0.003 0.00101 0.0412
           }
@@ -477,7 +490,7 @@ DEF Square_right Solid {
   name "<STL_BINARY>(3)"
 }
 DEF CUBE Solid {
-  translation 1.58904 0.0249608 -1.81729
+  translation 1.33452 0.0249608 -2.07181
   rotation -9.982762680071248e-17 1 9.000700216831303e-17 -0.785395307179586
   children [
     DEF Cube_faces Group {
@@ -672,7 +685,7 @@ DEF right_front_gate Robot {
   controller "gate"
 }
 DEF left_front_gate Robot {
-  translation 1.95998 0.09 -4.2
+  translation 1.8889 0.09 -4.20487
   rotation 0 1 0 5.30716e-06
   scale 5 5 5
   children [
@@ -802,7 +815,7 @@ DEF left_backt_gate Robot {
   controller "gate2"
 }
 DEF right_back_gate Robot {
-  translation 1.94999 0.09 -3.62
+  translation 1.87999 0.09 -3.62
   rotation 0 -1 0 -5.307179586466759e-06
   scale 5 5 5
   children [
@@ -884,8 +897,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.01859999127328947 -0.009288098851301338 0.004659086527582828
-            rotation 1.2928239758479179e-06 0.8295052310058004 0.5584989451488181 3.1415854683059417
+            translation -0.018599991273289256 -0.009288098851301338 0.004659086527582826
+            rotation 1.2928239759727468e-06 0.8295052310058004 0.5584989451488181 3.1415854683059417
             children [
               Transform {
                 translation 0 0 0.0155
@@ -901,7 +914,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 5.529591457048426e-10 -1.836665523932409e-06 0.01599995706256183
+                      translation 5.529591690944266e-10 -1.8366655239323979e-06 0.015999957062561836
                       rotation 0 0 1 3.1199999788022375
                       children [
                         Transform {
@@ -1266,14 +1279,14 @@ Robot {
       resolution 0.001
     }
     DEF IR_PANEL Transform {
-      translation 0.0045 -0.045 0.03
+      translation 0.0045 -0.045 0.035
       children [
         Solid {
           translation 0.03 0.0225 0.004
           children [
-            Shape {
+            DEF IR_SPACER Shape {
               geometry Cylinder {
-                height 0.045
+                height 0.04
                 radius 0.001
               }
             }
@@ -1283,41 +1296,26 @@ Robot {
         Solid {
           translation 0.03 0.0225 -0.004
           children [
-            Shape {
-              geometry Cylinder {
-                height 0.045
-                radius 0.001
-              }
-            }
+            USE IR_SPACER
           ]
           name "spacer(1)"
         }
         Solid {
           translation -0.03 0.0225 0.004
           children [
-            Shape {
-              geometry Cylinder {
-                height 0.045
-                radius 0.001
-              }
-            }
+            USE IR_SPACER
           ]
           name "spacer(2)"
         }
         Solid {
           translation -0.03 0.0225 -0.004
           children [
-            Shape {
-              geometry Cylinder {
-                height 0.045
-                radius 0.001
-              }
-            }
+            USE IR_SPACER
           ]
           name "spacer(3)"
         }
         DistanceSensor {
-          translation 0.0334 -0.001 0
+          translation 0.0335 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1342,7 +1340,7 @@ Robot {
           aperture 1
         }
         DistanceSensor {
-          translation 0.0239 -0.001 0
+          translation 0.02385 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1366,7 +1364,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation 0.0144 -0.001 0
+          translation 0.01435 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1390,7 +1388,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation 0.0049 -0.001 0
+          translation 0.00485 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1414,7 +1412,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.0056 -0.001 0
+          translation -0.00465 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1438,7 +1436,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.0151 -0.001 0
+          translation -0.01415 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1462,7 +1460,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.0246 -0.001 0
+          translation -0.02365 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1486,7 +1484,7 @@ Robot {
           type "infra-red"
         }
         DistanceSensor {
-          translation -0.0341 -0.001 0
+          translation -0.03315 0.0005 0
           rotation 0 0 1 -1.57
           children [
             Solid {
@@ -1510,12 +1508,13 @@ Robot {
           type "infra-red"
         }
         Solid {
+          translation 0 0.0015 0
           children [
             DEF ip_PCB Shape {
               appearance PBRAppearance {
               }
               geometry Box {
-                size 0.075 0.00157 0.0127
+                size 0.0749 0.00157 0.0127
               }
             }
           ]
@@ -1858,7 +1857,7 @@ Robot {
       ]
       endPoint DEF WHEEL_LEFT Solid {
         translation 0.0775 -0.02254777369449155 -0.0402852460640138
-        rotation 0.6272273786453122 -0.6267280994455207 -0.4623826389940866 4.008406480968045
+        rotation 0.6272273786453125 -0.6267280994455204 -0.4623826389940864 4.008406480968045
         children [
           DEF WHEEL Shape {
             appearance PBRAppearance {
@@ -1890,7 +1889,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.0775 -0.022499999973808495 -0.04030000002523185
-        rotation 0.6774556609554011 -0.6769163995458837 -0.28781594025577933 3.7024993553669643
+        rotation 0.6774556609554013 -0.6769163995458833 -0.28781594025577933 3.7024993553669643
         children [
           USE WHEEL
         ]

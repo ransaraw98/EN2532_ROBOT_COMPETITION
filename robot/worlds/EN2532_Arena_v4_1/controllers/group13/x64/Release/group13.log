@@ -3,7 +3,7 @@ C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\
 C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\FINAL_PROJECT\EN2532_ROBOT_COMPETITION\robot\worlds\EN2532_Arena_v4_1\controllers\group13\group13.c(251,38): warning C4244: 'function': conversion from 'double' to 'int', possible loss of data
 C:\Users\menuw\Documents\Modules\Semester_3\EN2532_Robot Design and Competition\FINAL_PROJECT\EN2532_ROBOT_COMPETITION\robot\worlds\EN2532_Arena_v4_1\controllers\group13\group13.c(335,1): warning C4090: 'initializing': different 'const' qualifiers
   Generating code
-  2 of 13 functions (15.4%) were compiled, the rest were copied from previous compilation.
+  1 of 13 functions ( 7.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

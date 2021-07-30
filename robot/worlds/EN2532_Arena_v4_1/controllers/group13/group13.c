@@ -19,7 +19,6 @@
 #include <webots/camera.h>
 #include <stdlib.h>
   ////////////////////////////////////// * MACROS ///////////////////////////////////////////////
-#define LINE_THRESH 500
 #define TIME_STEP 16
 /* Line Follow */
 #define nQTR 8
@@ -59,6 +58,7 @@ unsigned char path;
 unsigned int left = 0;
 unsigned int right = 0;
 int line_follow = 0;
+unsigned int LINE_THRESH =  500;
 int wall_flag = 0;
 int state4 = 0;
 WbDeviceTag QTR[nQTR];
@@ -155,24 +155,24 @@ short j_check(void) {
 
     ReadQTR2(QTR);
     if ((error[0] ==1) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 0) && (error[6] == 0)&&(error[7] == 0)) {
-        printf("left junction found");
+        printf("\t left junction found\t");
         return 1;
 
     }
     else if ((error[0] == 1) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 0) && (error[7] == 0)) {
-        printf("left junction found");
+        printf("\tleft junction found\t");
         return 1;
 
     }
 
     else if ((error[0] == 0) && (error[1] == 0) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 1)&&(error[7]==1)) {
 
-        printf("right junction found");
+        printf("\tright junction found\t");
         return 2;
     }
     else if ((error[0] == 0) && (error[1] == 1) && (error[2] == 1) && (error[3] == 1) && (error[4] == 1) && (error[5] == 1) && (error[6] == 1) && (error[7] == 1)) {
 
-        printf("right junction found");
+        printf("\tright junction found\t");
         return 2;
     }
      unsigned int flag = 1;
@@ -569,7 +569,7 @@ int main(int argc, char** argv) {
 
          //readQTR(QTR);
         junc = j_check();
-        printf("junc is %d\n", junc);
+        printf("\t Junc is %d\n", junc);
         if (state == 0) {
             if (junc == 3) {
                 line_follow = 1;
@@ -764,7 +764,6 @@ int main(int argc, char** argv) {
 
                 if (junc == 3) {
                     hardRightf(-1.4, -0.5, 2.5);
-                    state++;
                 }
                 if (junc == 1) {
                     hardLeftf(1.4, 2.5, -0.5);
@@ -779,19 +778,57 @@ int main(int argc, char** argv) {
             //Kp = 0.5;
             //Kd = 0.4;
             coeff = 3;
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
+                unsigned char ramp[] = "INCLINE DETECTED";
+            }
+            else if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.1) {
+                unsigned char ramp[] = "DECLINE DETECTED";
+                coeff = 4;
+                state++;
+            }
+            if (junc == 3) {
+                if (path == 'R') {
+                    hardRightf(-1.3, -0.5, 2.5);
+                }
+                else if (path == 'L') {
+                    hardLeftf(1.4, 2.5, -0.5);
+                }
+            }
+        }
+
+        if (state == 10) {
+            LINE_THRESH = 300;
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0) {
+                coeff = 1;
+            }
+            if (junc == 3) {
+                line_follow = 0;
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 0);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 0);
+                state++;
+            }
+        }
+
+        if (state == 11) {
+
+
+
         }
         wall_follow();
         ReadQTR2(QTR);
         lineFollow2(coeff);
 
 
-        //printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f", qtrNew[0], qtrNew[1], qtrNew[2], qtrNew[3], qtrNew[4], qtrNew[5], qtrNew[6], qtrNew[7]);
+        printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f\n", qtrStore[0], qtrStore[1], qtrStore[2], qtrStore[3], qtrStore[4], qtrStore[5], qtrStore[6], qtrStore[7]);
         printf("%d   %d   %d   %d    %d    %d   %d   %d\t", error[0], error[1], error[2], error[3], error[4], error[5], error[6],error[7]);
         /* Process sensor data here */
 
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
-        printf("STATE is %d \t LINE_FOLLOW is %d\n", state, line_follow);
-        printf("\t \t \t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
+        printf("\t STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
+        printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
+        printf("Pitch value %f\t QUARDRANT = %d\n", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
         /*
         * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);
