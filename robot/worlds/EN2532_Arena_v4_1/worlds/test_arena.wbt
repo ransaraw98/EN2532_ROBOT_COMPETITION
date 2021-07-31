@@ -14,12 +14,15 @@ WorldInfo {
     ContactProperties {
       material1 "box"
       material2 "teeth"
+      coulombFriction [
+        2
+      ]
     }
   ]
 }
 Viewpoint {
-  orientation -0.7650335726792936 -0.3740986021643011 -0.5241887718487227 1.0079831644009964
-  position 0.7950985036210607 3.3513624238635513 1.2969248742388626
+  orientation 0.019828894835447492 0.9788867034446235 0.20343951619319808 3.042665674936907
+  position 0.18238877397936265 0.2951202542737853 -0.6521667807780362
 }
 TexturedBackground {
 }
@@ -317,7 +320,7 @@ DEF Square_right Solid {
   name "<STL_BINARY>(3)"
 }
 DEF CUBE Solid {
-  translation 1.36621 0.0249804 -1.73303
+  translation 1.39808 0.0249804 -2.01023
   rotation 0.923466094398556 -3.562220364137309e-09 0.383680039220543 -3.1415853071795863
   children [
     DEF Cube_faces Group {
@@ -468,7 +471,7 @@ DEF right_front_gate Robot {
       ]
       endPoint Solid {
         translation -1.5757355088469403e-06 0.003500000354706073 0.01
-        rotation -2.976781001569214e-08 -4.484424366640849e-08 0.9999999999999984 1.6338063760881136
+        rotation -2.9767810015692246e-08 -4.484424366640868e-08 0.9999999999999987 1.633806376088113
         children [
           DEF axe Shape {
             appearance PBRAppearance {
@@ -707,15 +710,14 @@ DEF right_back_gate Robot {
   controller "gate2"
 }
 Robot {
-  translation 0.161833 0.0971925 -0.127389
-  rotation -0.004904388760769775 0.9999777473278101 -0.004522368857297729 1.5685
+  translation 0.14776 0.059 -0.12402
+  rotation 0 -1 0 -1.5707953071795862
   children [
     Transform {
       translation 0.01935 0.0298 0.05377
       children [
         DEF Servo1 HingeJoint {
           jointParameters HingeJointParameters {
-            position 0.600003848082796
             anchor 0 -0.01 0.002
           }
           device [
@@ -724,15 +726,15 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.01859999127328856 -0.010548116370832574 0.004697612435231624
-            rotation 2.08109692618282e-06 0.6795860100573332 0.733595838953591 3.1415862512447776
+            translation -0.01859999127328853 -0.008929183645829794 0.004535921280783888
+            rotation 1.042129602498572e-06 0.8660266688600068 0.4999978088173532 3.1415853071795863
             children [
               Transform {
                 translation 0 0 0.0155
                 children [
                   HingeJoint {
                     jointParameters HingeJointParameters {
-                      position 3.9817038555156614e-12
+                      position 3.14
                       axis 0 0 1
                     }
                     device [
@@ -741,8 +743,8 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation -4.020827001208331e-08 1.8362254348495114e-06 0.015999957062561836
-                      rotation 0 0 1 0
+                      translation 3.7283749259458845e-08 -1.8362871438331104e-06 0.01599995706256183
+                      rotation 0 0 0.9999999999999999 3.14
                       children [
                         Transform {
                           translation 0 0 0.016
@@ -848,10 +850,10 @@ Robot {
       ]
     }
     DEF color_detection Transform {
-      translation 0 0.02 -0.05
+      translation 0 0 -0.05
       children [
         Solid {
-          translation -0.005 0.034498 0.0309708
+          translation -0.005 0.032668 0.0409653
           rotation -1 0 0 -0.03320530717958636
           children [
             Camera {
@@ -879,7 +881,7 @@ Robot {
           }
         }
         Solid {
-          translation 0 0.067012 -0.0242034
+          translation 0 0.0770073 -0.0245113
           rotation 1 0 0 1.54
           children [
             Camera {
@@ -907,7 +909,7 @@ Robot {
           }
         }
         Solid {
-          translation 0 0.06 -0.03
+          translation 0 0.065 -0.03
           rotation 1 0 0 -1.5707996938995747
           children [
             Shape {
@@ -925,6 +927,7 @@ Robot {
             size 0.03 0.01 0.07
           }
           physics Physics {
+            density -1
             mass 0.05
             centerOfMass [
               0 0 0
@@ -1609,7 +1612,7 @@ Robot {
       ]
       endPoint DEF WHEEL_LEFT Solid {
         translation 0.0775 -0.022547773695500376 -0.0402852460672804
-        rotation 0.6272273690487062 -0.6267280898565529 -0.46238266500918307 4.008406523855774
+        rotation 0.6272273690487065 -0.6267280898565528 -0.4623826650091829 4.008406523855774
         children [
           DEF WHEEL Shape {
             appearance Appearance {
@@ -1648,7 +1651,7 @@ Robot {
       ]
       endPoint Solid {
         translation -0.0775 -0.0224999999738085 -0.040300000025231854
-        rotation 0.6774556789985453 -0.6769164175746643 -0.28781585538413723 3.7024991985034275
+        rotation 0.6774556789985455 -0.6769164175746641 -0.28781585538413723 3.7024991985034275
         children [
           USE WHEEL
         ]
@@ -1661,6 +1664,8 @@ Robot {
   name "robot(4)"
   boundingObject USE BOT_LAYER
   physics Physics {
+    density -1
+    mass 0.01
   }
   controller "group13"
 }

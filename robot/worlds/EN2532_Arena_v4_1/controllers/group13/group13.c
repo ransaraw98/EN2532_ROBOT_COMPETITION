@@ -40,8 +40,8 @@ unsigned int error[8] = { 0,0,0,0,0,0,0,0 };
 double weights[8] = { 0,1000,2000,3000,4000,5000,6000,7000};
 
 //
-double Kp = 0.46;
-double Kd = 0.15;                                                          
+double Kp = 0.5;
+double Kd = 0.3;                                                          
 double P = 0;
 double D = 0;
 double pEr = 0;
@@ -50,8 +50,8 @@ double Speeds[2] = { 0,0 };
 double PID = 0;
 short junc = -1;
 double eSUM = 0;
-double coeff = 1;
-unsigned short int state = 0;
+double coeff = 0.25;
+unsigned short int state =0;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quardrant = 0;
 unsigned char path = 'L';
@@ -444,7 +444,7 @@ void Lifting_box(double* linear, double* S1, double* S2, WbDeviceTag lr_1, WbDev
         wb_robot_step(TIME_STEP);
     }
 
-    while (*linear > -0.02) {
+    while (*linear > -0.03) {
         *linear -= 0.001;
         wb_motor_set_position(lr_1, -*linear);
         wb_motor_set_position(lr_2, *linear);
@@ -601,42 +601,41 @@ int main(int argc, char** argv) {
             wall_flag = 1;
             state++;
         }
-        /*if ((state == 1) || (state == 3)) {
-            if (junc == 1) {
+        if ((state == 1) || (state == 3)) {
                 if (junc == 1) {
-                    for (int i = 0; i < 50; i++) {
+                    for (int i = 0; i < 100; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], 1.5);
                         wb_motor_set_position(wheels[1], INFINITY);
                         wb_motor_set_velocity(wheels[1], 1.5);
                         wb_robot_step(TIME_STEP);
                     }
-                    hardLeftf(1.4, 1, -1);
+                    hardLeftf(1.55, 1, -1);
+                    coeff = 0.5;
                 }
                 if (junc == 2) {
-                    for (int i = 0; i < 50; i++) {
+                    for (int i = 0; i < 100; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], 1.5);
                         wb_motor_set_position(wheels[1], INFINITY);
                         wb_motor_set_velocity(wheels[1], 1.5);
                         wb_robot_step(TIME_STEP);
                     }
-                    hardLeftf(-1.4, -1, 1);
-
+                    hardRightf(-1.55, -1, 1);
                 }
-            }
         }
-        */
+        
         if ((state == 2) && (wb_distance_sensor_get_value(ds[2]) >= 1000) && (wb_distance_sensor_get_value(ds[1]) >= 1000)) {
             for (int i = 0; i < 20; i++) {
                 wb_motor_set_position(wheels[0], INFINITY);
-                wb_motor_set_velocity(wheels[0], 0.00628 * Speeds[0]);
+                wb_motor_set_velocity(wheels[0], 1);
                 wb_motor_set_position(wheels[1], INFINITY);
-                wb_motor_set_velocity(wheels[1], 0.00628 * Speeds[1]);
+                wb_motor_set_velocity(wheels[1], 1);
                 wb_robot_step(TIME_STEP);
             }
             line_follow = 1;
             wall_flag = 0;
+            coeff = 0.25;
             state++;
         }
         /*(state == 1) ||*/
@@ -662,7 +661,8 @@ int main(int argc, char** argv) {
 
         }
         if (state == 4) {
-
+            coeff = 0.5;
+            Kp = 0.65;
             if (junc == 1) {
                 line_follow = 0;
                 hardLeftf(1.57, 2.5, -0.5);
@@ -812,7 +812,7 @@ int main(int argc, char** argv) {
         if (state == 9) {
             //Kp = 0.5;
             line_follow = 1;
-            coeff = 3;
+            coeff = 2;
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
                 ramp = 'A';
             }
@@ -847,11 +847,14 @@ int main(int argc, char** argv) {
         }
 
         if (state == 10) {
-            line_follow = 0;
-            wb_motor_set_position(wheels[0], INFINITY);
-            wb_motor_set_velocity(wheels[0], 0.3);
+            coeff = 5;
+            line_follow = 1;
+            /*wb_motor_set_position(wheels[0], INFINITY);
+            wb_motor_set_velocity(wheels[0], 0.1);
             wb_motor_set_position(wheels[1], INFINITY);
-            wb_motor_set_velocity(wheels[1], 0.3);
+            wb_motor_set_velocity(wheels[1], 0.1);
+            */
+
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.005) {
                 ramp = 'E';
                 state++;
@@ -962,7 +965,7 @@ int main(int argc, char** argv) {
         printf("\t STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
         printf("Pitch value %f\t QUARDRANT = %d", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
-        printf("RAMP STATUS = %c\t TCOUNT %d\n",ramp,tcount);
+        printf("RAMP STATUS = %c\t TCOUNT %d\t LS %f RS %f\n",ramp,tcount,Speeds[0],Speeds[1]);
         /*
         * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);

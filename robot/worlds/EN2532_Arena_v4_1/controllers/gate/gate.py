@@ -1,7 +1,7 @@
 from controller import Robot
 
 robot = Robot()
-timestep = 100
+timestep = 16
 
 m = robot.getMotor("motor")
 m.setPosition(float('inf'))
@@ -18,13 +18,13 @@ while (robot.step(timestep) != -1):
     k = pSensor.getValue()
     t += timestep
     #print (t)
-    if (k > 22) & (speed ==3) & (t>0):
+    if (k > 23) & (speed ==3) & (t>0):
         speed =0
-    if (k > 22) & (speed ==0) & (t >10000) :
+    if (k > 23) & (speed ==0) & (t >10000) :
         speed = -3
-    if (k < 21.5) & (speed == -3) & (t >10000):
+    if (k < 21.1) & (speed == -3) & (t >10000):
         speed = 0
-    if (k < 21.5) & (speed == -0) & (t >20000):
+    if (k < 21.1) & (speed == 0) & (t >20000):
         speed = 3
         t=0
    
