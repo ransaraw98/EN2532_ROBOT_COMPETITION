@@ -51,7 +51,7 @@ double PID = 0;
 short junc = -1;
 double eSUM = 0;
 double coeff = 0.25;
-unsigned short int state =0;
+unsigned short int state =9;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quardrant = 0;
 unsigned char path = 'L';
@@ -488,7 +488,7 @@ void Placing_box(double* linear, double* S1, WbDeviceTag lr_1, WbDeviceTag lr_2,
         wb_robot_step(TIME_STEP);
     }
 
-    while (*S1 >= 0.6) {
+    while (*S1 >= 0.3) {
         *S1 -= 0.04;
         wb_motor_set_position(Sr_1, *S1);
         wb_robot_step(TIME_STEP);
@@ -812,7 +812,7 @@ int main(int argc, char** argv) {
         if (state == 9) {
             //Kp = 0.5;
             line_follow = 1;
-            coeff = 2;
+            coeff = 1.5;
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
                 ramp = 'A';
             }
@@ -847,7 +847,10 @@ int main(int argc, char** argv) {
         }
 
         if (state == 10) {
-            coeff = 5;
+            coeff = 1.5;
+            Kp = 0.0214;
+            Kd = 0.005;
+            LINE_THRESH = 800;
             line_follow = 1;
             /*wb_motor_set_position(wheels[0], INFINITY);
             wb_motor_set_velocity(wheels[0], 0.1);
@@ -864,6 +867,8 @@ int main(int argc, char** argv) {
         if (state == 11) {
             line_follow = 1;
             coeff = 1;
+            Kp = 0.65;
+            Kd = 0.3;
             if (junc == 1) {
                 for (int i = 0; i < 100; i++) {
                     wb_motor_set_position(wheels[0], INFINITY);
@@ -962,7 +967,7 @@ int main(int argc, char** argv) {
         /* Process sensor data here */
 
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
-        printf("\t STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
+        printf("    STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
         printf("Pitch value %f\t QUARDRANT = %d", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
         printf("RAMP STATUS = %c\t TCOUNT %d\t LS %f RS %f\n",ramp,tcount,Speeds[0],Speeds[1]);

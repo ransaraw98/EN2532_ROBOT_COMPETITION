@@ -4,6 +4,12 @@ WorldInfo {
   coordinateSystem "NUE"
   contactProperties [
     ContactProperties {
+      material1 "wheel"
+      coulombFriction [
+        10
+      ]
+    }
+    ContactProperties {
     }
     ContactProperties {
       material2 "CASTER"
@@ -21,8 +27,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.019828894835447492 0.9788867034446235 0.20343951619319808 3.042665674936907
-  position 0.18238877397936265 0.2951202542737853 -0.6521667807780362
+  orientation -0.14435372206061348 0.9707308048075842 0.19194714773829585 1.5189814781732967
+  position 5.180234145919913 1.741310179204189 -2.373414984754789
 }
 TexturedBackground {
 }
@@ -710,8 +716,8 @@ DEF right_back_gate Robot {
   controller "gate2"
 }
 Robot {
-  translation 0.14776 0.059 -0.12402
-  rotation 0 -1 0 -1.5707953071795862
+  translation 1.11776 0.059 -4.01402
+  rotation 0 1 0 3.14159
   children [
     Transform {
       translation 0.01935 0.0298 0.05377
@@ -727,7 +733,7 @@ Robot {
           ]
           endPoint DEF Servo_block2 Solid {
             translation -0.01859999127328853 -0.008929183645829794 0.004535921280783888
-            rotation 1.042129602498572e-06 0.8660266688600068 0.4999978088173532 3.1415853071795863
+            rotation 1.0421296024985705e-06 0.8660266688600068 0.4999978088173532 3.1415853071795863
             children [
               Transform {
                 translation 0 0 0.0155
@@ -743,7 +749,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 3.7283749259458845e-08 -1.8362871438331104e-06 0.01599995706256183
+                      translation 3.728374925945875e-08 -1.8362871438331075e-06 0.01599995706256183
                       rotation 0 0 0.9999999999999999 3.14
                       children [
                         Transform {
@@ -1277,7 +1283,7 @@ Robot {
       ]
     }
     DEF MOTOR_DRIVER Solid {
-      translation 0 0.005 0
+      translation 0 0.005 -0.05
       children [
         DEF driver Shape {
           appearance Appearance {
@@ -1297,7 +1303,7 @@ Robot {
       }
     }
     DEF BATTERY Solid {
-      translation -1.10196e-07 0.01 -0.06
+      translation 1.46928e-07 0.01 0.01
       rotation 0 1 0 1.5708
       children [
         DEF BATTERY Shape {
@@ -1629,6 +1635,7 @@ Robot {
           }
         ]
         name "left_wheel"
+        contactMaterial "wheel"
         boundingObject USE WHEEL
         physics DEF WHEEL_PH Physics {
           density -1
@@ -1656,6 +1663,7 @@ Robot {
           USE WHEEL
         ]
         name "right_wheel"
+        contactMaterial "wheel"
         boundingObject USE WHEEL
         physics USE WHEEL_PH
       }
