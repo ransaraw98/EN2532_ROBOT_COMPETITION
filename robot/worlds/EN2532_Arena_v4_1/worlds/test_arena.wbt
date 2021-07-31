@@ -26,8 +26,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation 0.6294290352371308 0.7297980495478866 0.2668593196359373 5.040169168436395
-  position -0.533488373547562 3.1214711933518617 -0.1419705858849276
+  orientation 0.4685906707618797 0.7619826583384186 0.44699576247034845 4.3639824168009715
+  position -2.608882566239544 7.847015922911237 -3.0940099302438293
 }
 TexturedBackground {
 }
@@ -325,7 +325,7 @@ DEF Square_right Solid {
   name "<STL_BINARY>(3)"
 }
 DEF CUBE Solid {
-  translation 1.26081 0.0249804 -1.6418
+  translation 1.25117 0.0249804 -2.15938
   rotation -0.9234660943985559 3.562190364134242e-09 -0.38368003922054295 3.1415853071795863
   children [
     DEF Cube_faces Group {
@@ -475,7 +475,7 @@ DEF right_front_gate Robot {
       ]
       endPoint Solid {
         translation -1.5757355088469403e-06 0.003500000354706073 0.01
-        rotation -2.9767810015692196e-08 -4.4844243666408607e-08 0.9999999999999984 1.6338063760881136
+        rotation -2.9767810015692246e-08 -4.484424366640868e-08 0.9999999999999987 1.633806376088113
         children [
           DEF axe Shape {
             appearance PBRAppearance {
@@ -714,7 +714,7 @@ DEF right_back_gate Robot {
   controller "gate2"
 }
 Robot {
-  translation 0.367745 0.059 -1.89402
+  translation 0.157746 0.059 -0.10402
   rotation 0 1 0 1.5708
   children [
     Transform {
@@ -731,7 +731,7 @@ Robot {
           ]
           endPoint DEF Servo_block2 Solid {
             translation -0.01859999127328853 -0.008929183645829794 0.004535921280783888
-            rotation 1.0421296024985633e-06 0.8660266688600067 0.4999978088173531 3.1415853071795863
+            rotation 1.0421296024985633e-06 0.8660266688600068 0.4999978088173532 3.1415853071795863
             children [
               Transform {
                 translation 0 0 0.0155
@@ -747,7 +747,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 3.7283749259458356e-08 -1.8362871438330933e-06 0.01599995706256183
+                      translation 3.728374925945835e-08 -1.836287143833093e-06 0.01599995706256183
                       rotation 0 0 0.9999999999999999 3.14
                       children [
                         Transform {

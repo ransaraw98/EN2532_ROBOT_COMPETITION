@@ -51,7 +51,7 @@ double PID = 0;
 short junc = -1;
 double eSUM = 0;
 double coeff = 0.25;
-unsigned short int state = 3;
+unsigned short int state = 0;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quadrant = 0;
 unsigned char path ;// = 'L'
@@ -66,6 +66,7 @@ unsigned short int tcount = 0;
 char qArray[4] = { '1','4','3','2'};
 int lCount = 0;
 int tempCount = 0;
+unsigned tempF = 0;
 
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
@@ -674,7 +675,6 @@ int main(int argc, char** argv) {
         if (state == 4) {
             coeff = 0.5;
             Kp = 0.65;
-            Kd = 0.4;
             /*if ((junc == 1) && (preVjunc - 1)) {
                     lCount++;
                 }
@@ -802,8 +802,9 @@ int main(int argc, char** argv) {
                 wb_motor_set_velocity(wheels[1], -1);
                 wb_robot_step(TIME_STEP);
             }
-            hardLeftf(2.8, 2.5, -2.5);
+            hardLeftf(3, 2.5, -2.5);
             state++;
+            
         }
 
         if (state == 8) {
@@ -832,8 +833,9 @@ int main(int argc, char** argv) {
 
                 if (junc == 3) {
                     hardRightf(-1.4, -0.5, 2.5);
+                    tempF++;
                 }
-                if (junc == 1) {
+                if ((junc == 1)&&(tempF==1)) {
                     hardLeftf(1.4, 2.5, -0.5);
                     state++;
                 }
@@ -1003,7 +1005,7 @@ int main(int argc, char** argv) {
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
         printf("    STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
-        printf("   Pitch value %f\t QUARDRANT = %c   QPOINTER = %d  ", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],qArray[lCount],lCount);
+        printf("   Pitch value %f\t QUARDRANT = %c   quadrant = %d  ", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],qArray[lCount],quadrant);
         printf("RAMP STATUS = %c\t TCOUNT %d\t LS %f RS %f\n",ramp,tcount,Speeds[0],Speeds[1]);
         /*
         * Enter here functions to send actuator commands, like:
