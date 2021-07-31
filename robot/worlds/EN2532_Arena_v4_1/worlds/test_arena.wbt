@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.7046487889304648 -0.7094269299884282 -0.013546780651623389 0.28156878915929434
-  position 1.994482255661475 0.17129750325348217 -4.0888552511565255
+  orientation -0.7650335726792936 -0.3740986021643011 -0.5241887718487227 1.0079831644009964
+  position 0.7950985036210607 3.3513624238635513 1.2969248742388626
 }
 TexturedBackground {
 }
@@ -317,8 +317,8 @@ DEF Square_right Solid {
   name "<STL_BINARY>(3)"
 }
 DEF CUBE Solid {
-  translation 2.093276409847573 0.024980379911766357 -4.532722393032385
-  rotation 0.7063434687809753 2.0558822443503653e-10 0.707869270494531 3.1415926532096217
+  translation 1.36621 0.0249804 -1.73303
+  rotation 0.923466094398556 -3.562220364137309e-09 0.383680039220543 -3.1415853071795863
   children [
     DEF Cube_faces Group {
       children [
@@ -468,7 +468,7 @@ DEF right_front_gate Robot {
       ]
       endPoint Solid {
         translation -1.5757355088469403e-06 0.003500000354706073 0.01
-        rotation -2.9767810015692157e-08 -4.484424366640851e-08 0.9999999999999987 1.633806376088113
+        rotation -2.976781001569214e-08 -4.484424366640849e-08 0.9999999999999984 1.6338063760881136
         children [
           DEF axe Shape {
             appearance PBRAppearance {
@@ -596,7 +596,7 @@ DEF left_backt_gate Robot {
         }
       ]
       endPoint Solid {
-        translation 4.216731649175299e-05 0.007001991128431943 0.009999999999999568
+        translation 4.2167316491752976e-05 0.007001991128431943 0.009999999999999568
         rotation 0 0 0.9999999999999999 1.6340457448863441
         children [
           DEF axe Shape {
@@ -661,7 +661,7 @@ DEF right_back_gate Robot {
         }
       ]
       endPoint Solid {
-        translation 4.216731649175299e-05 0.007001991128431943 0.009999999999999568
+        translation 4.2167316491752976e-05 0.007001991128431943 0.009999999999999568
         rotation 0 0 0.9999999999999999 1.6340457448863441
         children [
           DEF axe Shape {
@@ -707,8 +707,8 @@ DEF right_back_gate Robot {
   controller "gate2"
 }
 Robot {
-  translation 2.0923737125137505 0.05510486068431568 -4.672753448308818
-  rotation -0.9702138900988154 -0.2390379304768884 0.03931762012952812 0.009705031662122008
+  translation 0.161833 0.0971925 -0.127389
+  rotation -0.004904388760769775 0.9999777473278101 -0.004522368857297729 1.5685
   children [
     Transform {
       translation 0.01935 0.0298 0.05377
@@ -724,8 +724,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.01859999127328861 -0.010548116370832574 0.004697612435231624
-            rotation 2.0810969262572887e-06 0.6795860100573332 0.733595838953591 3.1415862512447776
+            translation -0.01859999127328856 -0.010548116370832574 0.004697612435231624
+            rotation 2.08109692618282e-06 0.6795860100573332 0.733595838953591 3.1415862512447776
             children [
               Transform {
                 translation 0 0 0.0155
@@ -741,7 +741,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation -4.020826996090418e-08 1.836225434850632e-06 0.015999957062561836
+                      translation -4.020827001208331e-08 1.8362254348495114e-06 0.015999957062561836
                       rotation 0 0 1 0
                       children [
                         Transform {
@@ -772,7 +772,7 @@ Robot {
                                 }
                               ]
                               endPoint Solid {
-                                translation -0.05 -0.02 0.03
+                                translation -0.048 -0.02 0.03
                                 rotation -0.3151428929356725 0.9469237496624208 0.06340638262349023 -3.5062672765207026e-09
                                 children [
                                   DEF Tooth Shape {
@@ -801,7 +801,7 @@ Robot {
                                 }
                               ]
                               endPoint Solid {
-                                translation 0.05 -0.02 0.03
+                                translation 0.048 -0.02 0.03
                                 children [
                                   USE Tooth
                                 ]
@@ -1662,7 +1662,7 @@ Robot {
   boundingObject USE BOT_LAYER
   physics Physics {
   }
-  controller "ransika"
+  controller "group13"
 }
 DEF Ramp Solid {
   translation 1.137500000101274 0.0890518180494772 -4.720799993678738
