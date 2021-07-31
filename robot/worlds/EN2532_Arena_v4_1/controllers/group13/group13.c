@@ -51,18 +51,21 @@ double PID = 0;
 short junc = -1;
 double eSUM = 0;
 double coeff = 0.25;
-unsigned short int state =9;
+unsigned short int state = 3;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
-unsigned short quardrant = 0;
-unsigned char path = 'L';
+unsigned short quadrant = 0;
+unsigned char path ;// = 'L'
 unsigned int left = 0;
 unsigned int right = 0;
-int line_follow = 0;
+int line_follow = 1;
 unsigned int LINE_THRESH =  500;
 int wall_flag = 0;
 unsigned char ramp='0';
-unsigned short int preVjunc = 0;
+short int preVjunc = 0;
 unsigned short int tcount = 0;
+char qArray[4] = { '1','4','3','2'};
+int lCount = 0;
+int tempCount = 0;
 
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
@@ -601,9 +604,11 @@ int main(int argc, char** argv) {
             wall_flag = 1;
             state++;
         }
+
+
         if ((state == 1) || (state == 3)) {
                 if (junc == 1) {
-                    for (int i = 0; i < 100; i++) {
+                    for (int i = 0; i < 110; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], 1.5);
                         wb_motor_set_position(wheels[1], INFINITY);
@@ -614,7 +619,7 @@ int main(int argc, char** argv) {
                     coeff = 0.5;
                 }
                 if (junc == 2) {
-                    for (int i = 0; i < 100; i++) {
+                    for (int i = 0; i < 110; i++) {
                         wb_motor_set_position(wheels[0], INFINITY);
                         wb_motor_set_velocity(wheels[0], 1.5);
                         wb_motor_set_position(wheels[1], INFINITY);
@@ -652,35 +657,53 @@ int main(int argc, char** argv) {
         }*/
 
         if ((state == 3) && (junc == 3)) {
-
-            hardRightf(-1.3, -0.5, 2.5);
+            for (int i = 0; i < 110; i++) {
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 1.5);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 1.5);
+                wb_robot_step(TIME_STEP);
+            }
+            hardRightf(-1.3, -1, 1);
             line_follow = 1;
             Kp = 0.1;
-            quardrant = 1;
+            quadrant = 1;
             state++;
 
         }
         if (state == 4) {
             coeff = 0.5;
             Kp = 0.65;
+            Kd = 0.4;
+            /*if ((junc == 1) && (preVjunc - 1)) {
+                    lCount++;
+                }
+                */
             if (junc == 1) {
                 line_follow = 0;
-                hardLeftf(1.57, 2.5, -0.5);
+                for (int i = 0; i < 120; i++) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], 1.5);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], 1.2);
+                    wb_robot_step(TIME_STEP);
+                }
+                hardLeftf(1.57, 1, -1);
                 state++;
                 printf("STATE is %d \t LINE_FOLLOW is %d\n", state, line_follow);
             }
+            preVjunc = junc;
         }
         if (state == 5) {
-            /*for (int i = 0; i < 100; i++) {
-                wb_motor_set_position(wheels[0], INFINITY);
-                wb_motor_set_velocity(wheels[0], -1);
-                wb_motor_set_position(wheels[1], INFINITY);
-                wb_motor_set_velocity(wheels[1], -1);
+           /* for (int i = 0; i < 100; i++) {
+                line_follow = 1;
+                lineFollow2(2);
                 wb_robot_step(TIME_STEP);
             }
             */
+            line_follow = 0;
             printf("BACKING");
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 120; i++) {
                 wb_motor_set_position(wheels[0], INFINITY);
                 wb_motor_set_velocity(wheels[0], -1);
                 wb_motor_set_position(wheels[1], INFINITY);
@@ -716,16 +739,16 @@ int main(int argc, char** argv) {
                 */
 
                 hardRightf(-1.25, -0.5, 2.5);
-                quardrant++;
+                quadrant++;
                 line_follow = 1;
+                lCount++;
             }
         }
 
         if (state == 6) {
-
             if (wb_distance_sensor_get_value(ds[0]) < 100) {
                 line_follow = 0;
-                for (int i = 0; i < 50; i++) {
+                for (int i = 0; i < 100; i++) {
                     wb_motor_set_velocity(wheels[0], 0);
                     wb_motor_set_velocity(wheels[1], 0);
                     wb_robot_step(TIME_STEP);
@@ -779,15 +802,25 @@ int main(int argc, char** argv) {
                 wb_motor_set_velocity(wheels[1], -1);
                 wb_robot_step(TIME_STEP);
             }
-            hardLeftf(2.7, 2.5, -2.5);
+            hardLeftf(2.8, 2.5, -2.5);
             state++;
         }
 
         if (state == 8) {
+            if (junc == 1) {
+                tempCount++;
+                printf("\ttempCount %d\t\n", tempCount);
+                if (tempCount > 15) {
+                    lCount++;
+                    tempCount = 0;
+                }
+            }
+            preVjunc = junc;
             line_follow = 1;
-            if (quardrant < 4) {
+            if (quadrant < 4) {
                 if (junc == 3) {
                     hardLeftf(1.65, 2.5, -0.5);
+                    lCount++;
                 }
                 if (junc == 2) {
                     hardRightf(-1.27, -0.5, 2.5);
@@ -870,25 +903,25 @@ int main(int argc, char** argv) {
             Kp = 0.65;
             Kd = 0.3;
             if (junc == 1) {
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 110; i++) {
                     wb_motor_set_position(wheels[0], INFINITY);
                     wb_motor_set_velocity(wheels[0], 1.5);
                     wb_motor_set_position(wheels[1], INFINITY);
                     wb_motor_set_velocity(wheels[1], 1.5);
                     wb_robot_step(TIME_STEP);
                 }
-                hardLeftf(1.4, 1, -1);
+                hardLeftf(1.5, 1, -1);
                 state++;
             }
             if (junc == 2) {
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 110; i++) {
                     wb_motor_set_position(wheels[0], INFINITY);
                     wb_motor_set_velocity(wheels[0], 1.5);
                     wb_motor_set_position(wheels[1], INFINITY);
                     wb_motor_set_velocity(wheels[1], 1.5);
                     wb_robot_step(TIME_STEP);
                 }
-                hardRightf(-1.4, -1, 1);
+                hardRightf(-1.5, -1, 1);
                 state++;
             }
         }
@@ -915,16 +948,17 @@ int main(int argc, char** argv) {
                 coeff = 0.5;
                 line_follow = 1;
                 state++;
-                
+                preVjunc = 0;
             }
         }
 
         if (state == 15) {
             
-            if ((preVjunc == 3) && junc == -1) {
+            if ((preVjunc == -1) && (junc == 3)) {
+                printf("\n*********************************TRANSITION FOUND**************************************");
                 tcount++;
             }
-            if (tcount == 2) {
+            if (tcount ==2) {
                 state++;
             }
             preVjunc = junc;
@@ -942,7 +976,7 @@ int main(int argc, char** argv) {
         }
 
         if (state == 17) {
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 225; i++) {
                 wb_motor_set_position(wheels[0], INFINITY);
                 wb_motor_set_velocity(wheels[0], 1);
                 wb_motor_set_position(wheels[1], INFINITY);
@@ -963,13 +997,13 @@ int main(int argc, char** argv) {
 
 
         printf("%4f   %4f   %4f   %4f    %4f    %4f   %4f    %4f\n", qtrStore[0], qtrStore[1], qtrStore[2], qtrStore[3], qtrStore[4], qtrStore[5], qtrStore[6], qtrStore[7]);
-        printf("%d   %d   %d   %d    %d    %d   %d   %d\t", error[0], error[1], error[2], error[3], error[4], error[5], error[6],error[7]);
+        printf("%d   %d   %d   %d    %d    %d   %d   %d\t\n", error[0], error[1], error[2], error[3], error[4], error[5], error[6],error[7]);
         /* Process sensor data here */
 
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
         printf("    STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
-        printf("Pitch value %f\t QUARDRANT = %d", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
+        printf("   Pitch value %f\t QUARDRANT = %c   QPOINTER = %d  ", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],qArray[lCount],lCount);
         printf("RAMP STATUS = %c\t TCOUNT %d\t LS %f RS %f\n",ramp,tcount,Speeds[0],Speeds[1]);
         /*
         * Enter here functions to send actuator commands, like:
