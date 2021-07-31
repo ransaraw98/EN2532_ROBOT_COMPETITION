@@ -18,8 +18,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.1363644794997568 -0.895741995415545 -0.42314419100318257 2.6169725107919453
-  position 0.4027642143600497 1.2808028160917073 -5.718023550900102
+  orientation -0.7679974241740517 -0.637758126780402 -0.05869010297805075 0.40082103675607444
+  position 1.467518531686705 0.4873693785354558 -2.800974014200735
 }
 TexturedBackground {
 }
@@ -318,7 +318,7 @@ DEF Square_right Solid {
 }
 DEF CUBE Solid {
   translation 1.349 0.0249608 -1.72655
-  rotation 3.72821e-17 1 4.135e-17 2.3562
+  rotation -2.87645e-18 1 5.56014e-17 -2.356185307179586
   children [
     DEF Cube_faces Group {
       children [
@@ -448,7 +448,7 @@ DEF CUBE Solid {
   }
 }
 DEF right_front_gate Robot {
-  translation -0.0600157 0.09 -4.18
+  translation -0.0600157 0.03 -4.18
   rotation 0 -1 0 -5.307179586466759e-06
   scale 5 5 5
   children [
@@ -467,8 +467,8 @@ DEF right_front_gate Robot {
         }
       ]
       endPoint Solid {
-        translation 4.2166378666786074e-05 0.007002010891015786 0.009999999999999568
-        rotation 0 0 0.9999999999999999 1.6345144207446483
+        translation 2.168404344971009e-19 0.0034999999999999988 0.01
+        rotation -2.975142738413779e-08 -4.484146730746687e-08 0.9999999999999984 1.6342565862487082
         children [
           DEF axe Shape {
             appearance PBRAppearance {
@@ -479,7 +479,7 @@ DEF right_front_gate Robot {
             }
           }
           Solid {
-            translation 0 -0.02 0.01
+            translation 0 -0.035 0.01
             children [
               DEF arm Shape {
                 geometry Box {
@@ -512,7 +512,7 @@ DEF right_front_gate Robot {
   controller "gate"
 }
 DEF left_front_gate Robot {
-  translation 1.8889 0.09 -4.20487
+  translation 1.8889 0.025 -4.20487
   rotation 0 1 0 5.30716e-06
   scale 5 5 5
   children [
@@ -531,7 +531,7 @@ DEF left_front_gate Robot {
         }
       ]
       endPoint Solid {
-        translation 0.0009999999999999998 0.00563732 0.01
+        translation 0.0009999999999999996 0.00563732 0.01
         rotation -2.99076856235029e-08 -4.473740291279792e-08 0.9999999999999984 1.6342564919596279
         children [
           DEF axe Shape {
@@ -543,7 +543,7 @@ DEF left_front_gate Robot {
             }
           }
           Solid {
-            translation 0 -0.02 0.01
+            translation 0 -0.035 0.01
             children [
               DEF arm Shape {
                 geometry Box {
@@ -577,7 +577,7 @@ DEF left_front_gate Robot {
   controller "gate"
 }
 DEF left_backt_gate Robot {
-  translation -0.070011 0.09 -3.6
+  translation -0.06 0.03 -3.6
   rotation 0 -1 0 -5.307179586466759e-06
   scale 5 5 5
   children [
@@ -608,7 +608,7 @@ DEF left_backt_gate Robot {
             }
           }
           Solid {
-            translation 0 -0.02 0.01
+            translation 0 -0.035 0.01
             children [
               DEF arm Shape {
                 geometry Box {
@@ -642,7 +642,7 @@ DEF left_backt_gate Robot {
   controller "gate2"
 }
 DEF right_back_gate Robot {
-  translation 1.87999 0.09 -3.62
+  translation 1.87999 0.025 -3.62
   rotation 0 -1 0 -5.307179586466759e-06
   scale 5 5 5
   children [
@@ -673,7 +673,7 @@ DEF right_back_gate Robot {
             }
           }
           Solid {
-            translation 0 -0.02 0.01
+            translation 0 -0.035 0.01
             children [
               DEF arm Shape {
                 geometry Box {
@@ -707,8 +707,8 @@ DEF right_back_gate Robot {
   controller "gate2"
 }
 Robot {
-  translation 1.12252 0.0586919 -3.94289
-  rotation -0.000611600840391295 0.999999739031321 0.0003845538996434506 3.14155
+  translation 2.08257 0.060423 -4.66285
+  rotation -0.5320700113459037 0.028752800613127027 -0.8462120180446929 -0.0014453071795861305
   children [
     Transform {
       translation 0.01935 0.0298 0.05377
@@ -724,8 +724,8 @@ Robot {
             }
           ]
           endPoint DEF Servo_block2 Solid {
-            translation -0.018599991273288895 -0.00928809885130134 0.004659086527582826
-            rotation 1.292823976167835e-06 0.8295052310058003 0.558498945148818 3.1415854683059417
+            translation -0.018599991273288638 -0.00928809885130134 0.004659086527582826
+            rotation 1.292823976283142e-06 0.8295052310058004 0.5584989451488181 3.1415854683059417
             children [
               Transform {
                 translation 0 0 0.0155
@@ -741,7 +741,7 @@ Robot {
                       }
                     ]
                     endPoint Solid {
-                      translation 5.529591724951712e-10 -1.8366655239323858e-06 0.015999957062561836
+                      translation 5.529591724953764e-10 -1.836665523932378e-06 0.015999957062561836
                       rotation 0 0 1 3.1199999788022375
                       children [
                         Transform {

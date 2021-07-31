@@ -51,17 +51,18 @@ double PID = 0;
 short junc = -1;
 double eSUM = 0;
 double coeff = 1;
-unsigned short int state = 9;
+unsigned short int state = 0;
 char ds_names[3][10] = { "front_ir","left_ir","right_ir" };
 unsigned short quardrant = 0;
-unsigned char path =  'L';
+unsigned char path = 'L';
 unsigned int left = 0;
 unsigned int right = 0;
 int line_follow = 0;
 unsigned int LINE_THRESH =  500;
 int wall_flag = 0;
 unsigned char ramp='0';
-
+unsigned short int preVjunc = 0;
+unsigned short int tcount = 0;
 
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
@@ -600,6 +601,32 @@ int main(int argc, char** argv) {
             wall_flag = 1;
             state++;
         }
+        /*if ((state == 1) || (state == 3)) {
+            if (junc == 1) {
+                if (junc == 1) {
+                    for (int i = 0; i < 50; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], 1.5);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], 1.5);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    hardLeftf(1.4, 1, -1);
+                }
+                if (junc == 2) {
+                    for (int i = 0; i < 50; i++) {
+                        wb_motor_set_position(wheels[0], INFINITY);
+                        wb_motor_set_velocity(wheels[0], 1.5);
+                        wb_motor_set_position(wheels[1], INFINITY);
+                        wb_motor_set_velocity(wheels[1], 1.5);
+                        wb_robot_step(TIME_STEP);
+                    }
+                    hardLeftf(-1.4, -1, 1);
+
+                }
+            }
+        }
+        */
         if ((state == 2) && (wb_distance_sensor_get_value(ds[2]) >= 1000) && (wb_distance_sensor_get_value(ds[1]) >= 1000)) {
             for (int i = 0; i < 20; i++) {
                 wb_motor_set_position(wheels[0], INFINITY);
@@ -787,7 +814,7 @@ int main(int argc, char** argv) {
             line_follow = 1;
             coeff = 3;
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
-                ramp = 'N';
+                ramp = 'A';
             }
             if (junc == 3) {
                 if (path == 'R') {
@@ -814,33 +841,114 @@ int main(int argc, char** argv) {
                 }
             }
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.3) {
-                ramp = 'N';
+                ramp = 'D';
                 state++;
             }
         }
 
         if (state == 10) {
+            line_follow = 0;
+            wb_motor_set_position(wheels[0], INFINITY);
+            wb_motor_set_velocity(wheels[0], 0.3);
+            wb_motor_set_position(wheels[1], INFINITY);
+            wb_motor_set_velocity(wheels[1], 0.3);
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.005) {
                 ramp = 'E';
                 state++;
             }
-            else {
-                line_follow = 1;
-            }
         }
 
         if (state == 11) {
+            line_follow = 1;
             coeff = 1;
-            if (junc ==3) {
+            if (junc == 1) {
+                for (int i = 0; i < 100; i++) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], 1.5);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], 1.5);
+                    wb_robot_step(TIME_STEP);
+                }
+                hardLeftf(1.4, 1, -1);
+                state++;
+            }
+            if (junc == 2) {
+                for (int i = 0; i < 100; i++) {
+                    wb_motor_set_position(wheels[0], INFINITY);
+                    wb_motor_set_velocity(wheels[0], 1.5);
+                    wb_motor_set_position(wheels[1], INFINITY);
+                    wb_motor_set_velocity(wheels[1], 1.5);
+                    wb_robot_step(TIME_STEP);
+                }
+                hardRightf(-1.4, -1, 1);
+                state++;
+            }
+        }
+        
+
+        if (state == 12) {
+            if (junc == 3) {
                 line_follow = 0;
                 wb_motor_set_position(wheels[0], INFINITY);
                 wb_motor_set_velocity(wheels[0], 0);
                 wb_motor_set_position(wheels[1], INFINITY);
                 wb_motor_set_velocity(wheels[1], 0);
+                state++;
             }
-            
-
         }
+        if (state == 13) {
+            if (wb_distance_sensor_get_value(ds[0]) < 300) {
+                state++;
+            }
+        }
+
+        if (state == 14) {
+            if (wb_distance_sensor_get_value(ds[0]) > 300) {
+                coeff = 0.5;
+                line_follow = 1;
+                state++;
+                
+            }
+        }
+
+        if (state == 15) {
+            
+            if ((preVjunc == 3) && junc == -1) {
+                tcount++;
+            }
+            if (tcount == 2) {
+                state++;
+            }
+            preVjunc = junc;
+        }
+
+        if (state == 16) {
+            if (junc == 3) {
+                line_follow = 0;
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 0);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 0);
+                state++;
+            }  
+        }
+
+        if (state == 17) {
+            for (int i = 0; i < 200; i++) {
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 1);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 1);
+                wb_robot_step(TIME_STEP);
+                printf("FINAL LOOP\n");
+            }
+            wb_motor_set_position(wheels[0], INFINITY);
+            wb_motor_set_velocity(wheels[0], 0);
+            wb_motor_set_position(wheels[1], INFINITY);
+            wb_motor_set_velocity(wheels[1], 0);
+            state ++;
+        }
+
         wall_follow();
         ReadQTR2(QTR);
         lineFollow2(coeff);
@@ -854,7 +962,7 @@ int main(int argc, char** argv) {
         printf("\t STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
         printf("Pitch value %f\t QUARDRANT = %d", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
-        printf("RAMP STATUS = %c\n",ramp);
+        printf("RAMP STATUS = %c\t TCOUNT %d\n",ramp,tcount);
         /*
         * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);
