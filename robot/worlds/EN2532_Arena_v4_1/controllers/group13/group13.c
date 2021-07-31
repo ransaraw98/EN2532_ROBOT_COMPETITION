@@ -60,7 +60,9 @@ unsigned int right = 0;
 int line_follow = 0;
 unsigned int LINE_THRESH =  500;
 int wall_flag = 0;
-int state4 = 0;
+unsigned char ramp='0';
+
+
 WbDeviceTag QTR[nQTR];
 WbDeviceTag wheels[2];
 WbDeviceTag IMU;
@@ -785,7 +787,7 @@ int main(int argc, char** argv) {
             line_follow = 1;
             coeff = 3;
             if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.1) {
-                unsigned char ramp[] = "INCLINE DETECTED";
+                ramp = 'N';
             }
             if (junc == 3) {
                 if (path == 'R') {
@@ -811,11 +813,15 @@ int main(int argc, char** argv) {
                     //state++;
                 }
             }
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.3) {
+                ramp = 'N';
+                state++;
+            }
         }
 
         if (state == 10) {
-            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] < -0.3) {
-                line_follow = 0;
+            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.005) {
+                ramp = 'E';
                 state++;
             }
             else {
@@ -824,14 +830,15 @@ int main(int argc, char** argv) {
         }
 
         if (state == 11) {
-            wb_motor_set_position(wheels[0], INFINITY);
-            wb_motor_set_velocity(wheels[0], 0.1);
-            wb_motor_set_position(wheels[1], INFINITY);
-            wb_motor_set_velocity(wheels[1], 0.1);
-
-            if (wb_inertial_unit_get_roll_pitch_yaw(IMU)[1] > 0.02) {
-                state++;
+            coeff = 1;
+            if (junc ==3) {
+                line_follow = 0;
+                wb_motor_set_position(wheels[0], INFINITY);
+                wb_motor_set_velocity(wheels[0], 0);
+                wb_motor_set_position(wheels[1], INFINITY);
+                wb_motor_set_velocity(wheels[1], 0);
             }
+            
 
         }
         wall_follow();
@@ -846,7 +853,8 @@ int main(int argc, char** argv) {
        // printf("\t CAM1  %c \t CAM2  %c\n",readColor(CAM1),readColor(CAM2));
         printf("\t STATE is %d \t LINE_FOLLOW is %d", state, line_follow);
         printf("\t FRONT IR %f", wb_distance_sensor_get_value(ds[0]));
-        printf("Pitch value %f\t QUARDRANT = %d\n", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
+        printf("Pitch value %f\t QUARDRANT = %d", wb_inertial_unit_get_roll_pitch_yaw(IMU)[1],quardrant);
+        printf("RAMP STATUS = %c\n",ramp);
         /*
         * Enter here functions to send actuator commands, like:
          * wb_motor_set_position(my_actuator, 10.0);
