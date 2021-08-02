@@ -1,7 +1,7 @@
 # EN2532_ROBOT_COMPETITION
 ## Submission
 Final robot is in
-branch line_follow
+**branch line_follow**
 
 \robot\worlds\EN2532_Arena_v4_1\worlds\test_arena.wbt
 
